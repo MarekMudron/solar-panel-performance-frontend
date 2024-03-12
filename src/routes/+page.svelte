@@ -13,7 +13,7 @@
 
     function addressChosen() {
         addressCoords = [address.position.lat, address.position.lon];
-        currentLocation.set(addressCoords)
+        currentLocation.set(addressCoords);
     }
 
     function locationChosen(e) {
@@ -29,8 +29,18 @@
         addressCoords = [e.detail.coords.latitude, e.detail.coords.longitude];
     }}
 />
-<AddressChooser on:chosen={addressChosen} bind:address></AddressChooser>
-<LocationChooser bind:inputCoords={addressCoords} on:chosen={locationChosen}
-></LocationChooser>
 
-<a role="button" href="/design" class="btn btn-primary">Design</a>
+<div class=" d-flex align-items-center justify-content-center">
+    <div class="row">
+        <div class="col">
+            <AddressChooser on:chosen={addressChosen} bind:address
+            ></AddressChooser>
+
+            <LocationChooser
+                bind:inputCoords={addressCoords}
+                on:chosen={locationChosen}
+            ></LocationChooser>
+        </div>
+        <a role="button" href="/design" class="btn btn-primary">Design</a>
+    </div>
+</div>

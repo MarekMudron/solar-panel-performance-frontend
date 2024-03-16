@@ -1,7 +1,8 @@
 import * as THREE from "three"
 import { MathUtils } from "three";
 import * as polygonFactory from "./polygonFactory.js";
-import { createKeypoints } from "./Keypoints.js";
+import { createKeypoints } from "./Keypoints2d.js";
+import { createRoofKeypoints } from "./Keypoints3d.js";
 
 
 const baseColor = 0x003049;
@@ -108,6 +109,11 @@ class RoofBlock {
                     element.children[3].scale.set(1 ,1/requiredSize.y,1)
                 }
             });
+            this.roofKeyPointsGroup.children.forEach(element => {
+                if (element.name == "stitKeypoint") {
+                    element.scale.set(1, 0.3 / requiredSize.y, 0.3 / this.heightRoof);
+                }
+            });
         });
     }
 
@@ -125,6 +131,30 @@ class RoofBlock {
         this.modelGroup.updateMatrixWorld();
     }
 
+    setHeightRoof(requiredHeight) {
+		this.heightRoof = requiredHeight;
+		this.roofGroup.scale.setZ(requiredHeight);
+        this.roofKeyPointsGroup.children.forEach(element => {
+            if (element.name == "stitKeypoint") {
+                element.scale.setZ( 0.3 / requiredHeight);
+            }
+        });
+	}
+
+    setBaseHeight(requiredHeight) {
+		this.baseSize.z = requiredHeight;
+		this.modelGroup.children.forEach(group => {
+			if (group.userData.isBase) {
+				group.scale.setZ(requiredHeight);
+				group.position.setZ(requiredHeight / 2);
+			}
+			if (group.userData.isRoof) {
+				group.position.setZ(requiredHeight);
+			}
+		});
+	}
+
+
 }
 // eslint-disable-next-line no-unused-vars
 function getAngleDeg(heightRoof, houseSizeY) {
@@ -137,6 +167,8 @@ export class SedlovaBlock extends RoofBlock {
         this.roofGroup = this.initRoof();	// Group consisting of wireframe and filling
         this.modelGroup.add(this.roofGroup);
         this.rotateTo(azimuth)
+        this.roofKeyPointsGroup = createRoofKeypoints(this);
+        this.roofGroup.add(this.roofKeyPointsGroup);
     }
 
     initRoof() {
@@ -156,8 +188,6 @@ export class SedlovaBlock extends RoofBlock {
         g.scale.set(this.baseSize.x, this.baseSize.y, this.heightRoof);
         return g;
     }
-
-
 }
 
 

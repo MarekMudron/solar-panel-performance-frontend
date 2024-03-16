@@ -100,7 +100,6 @@ export class EdgeKeypoints {
         );
         this.edgeIndex = intersect.object.userData.lineIndex;
         let planeIntersected = intersect.object
-        console.log(this.edgeIndex);
         let sizeAlongAxis;
         let start, end;
         if (this.edgeIndex == 0) {
@@ -124,7 +123,6 @@ export class EdgeKeypoints {
     performCommand() {
         let currentPoint = getMapPlanePosition();
         let [offset, vec] = this.pointLineDistance(currentPoint, this.start, this.end);
-        console.log(this.edgeIndex);
         this.newSize = this.startHouseSize.clone()
         this.newPos = this.startHousePos.clone();
         if (this.edgeIndex == 0) {

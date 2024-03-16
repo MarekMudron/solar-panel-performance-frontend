@@ -24,13 +24,21 @@ export function getMapPlanePosition() {
     }
 }
 
+export function getIntersectWithMesh(mesh) {
+    raycaster.setFromCamera(getScreenPlanePosition(), camera);
+    let intersects = raycaster.intersectObject(mesh);
+    if (intersects.length > 0) {
+        return intersects[0]
+    }
+}
+
 
 export function getPlaneKeypointsIntersect(keypoints, fnToGetModel) {
     raycaster.setFromCamera(getScreenPlanePosition(), camera);
     for (const keypoint of keypoints) {
         let intersects = raycaster.intersectObjects(fnToGetModel(keypoint));
         if (intersects.length > 0) {
-            intersects[0].point.z = 0;
+            //intersects[0].point.z = 0;
             return [intersects[0], keypoint]
         }
     }

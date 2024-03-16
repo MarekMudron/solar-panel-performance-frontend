@@ -3,7 +3,7 @@ import { getMapPlanePosition } from "$lib/three-resources/Raycaster.js"
 import { add, scene } from "$lib/three-resources/Scene.js"
 import { LineBasicMaterial, BufferGeometry, Line, Vector3 } from "three";
 import {addBlock, removeBlock} from "./Site"
-import { activateKeypoints } from "./Keypoints";
+import { activate2dKeypoints } from "./Keypoints2d.js";
 import { addOp } from "./UndoRedo";
 let blockFactoryFunc;
 
@@ -103,5 +103,5 @@ function finishRect() {
     
     canvas.removeEventListener("pointerup", finishRect);
     canvas.removeEventListener("pointermove", blockMove);
-    activateKeypoints();
+    activate2dKeypoints();
 }

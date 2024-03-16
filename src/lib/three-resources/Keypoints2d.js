@@ -59,15 +59,26 @@ function finishCommand() {
 
 
 
-export function activateKeypoints() {
+export function activate2dKeypoints() {
     canvas.addEventListener("pointerdown", startCommand);
-    
+    cornerKeypoints.forEach(keypoint => {
+        keypoint.model.visible = true;
+    })
+    edgeKeypoints.forEach(keypoint => {
+        keypoint.model.visible = true;
+    })
 
 }
 
-export function deactivateKeypoints() {
+export function deactivate2dKeypoints() {
     canvas.removeEventListener("pointerdown", startCommand);
     canvas.removeEventListener("pointerup", finishCommand);
+    cornerKeypoints.forEach(keypoint => {
+        keypoint.model.visible = false;
+    })
+    edgeKeypoints.forEach(keypoint => {
+        keypoint.model.visible = false;
+    })
 }
 
 

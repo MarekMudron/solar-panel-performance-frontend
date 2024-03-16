@@ -1,6 +1,7 @@
 import * as THREE from "three"
 import { MathUtils } from "three";
 import * as polygonFactory from "./polygonFactory.js";
+import { createKeypoints } from "./Keypoints.js";
 
 
 const baseColor = 0x003049;
@@ -50,6 +51,8 @@ class RoofBlock {
         this.baseGroup = this.initBase2d();	// Group consisting of wireframe and filling
         this.modelGroup = new THREE.Group();
         this.modelGroup.add(this.baseGroup);
+        this.keyPointsGroup = createKeypoints(this);
+        this.modelGroup.add(this.keyPointsGroup);
         this.as2d()
         this.moveHorizontally(pos2d);
     }
@@ -57,7 +60,6 @@ class RoofBlock {
     initBase2d() {
         let g = new THREE.Group();
         const baseFilling = polygonFactory.getCuboid(this.baseSize);
-        console.log(this.baseSize);
         g.add(baseFilling);
         var wgeo = new THREE.EdgesGeometry(baseFilling.geometry);
         var wmat = new THREE.LineBasicMaterial({ color: 0x000000 });
@@ -72,8 +74,9 @@ class RoofBlock {
         return g;
     }
 
+
     as2d() {
-        this.modelGroup.scale.set(1, 1, 0)
+        this.modelGroup.scale.set(1, 1, 0.000000001)
     }
 
     as3d() {
@@ -85,16 +88,31 @@ class RoofBlock {
         this.modelGroup.children.forEach(group => {
             if (group.userData.isBase) {
                 group.scale.set(requiredSize.x, requiredSize.y, requiredSize.z);
+                return;
             }
             if (group.userData.isRoof) {
                 group.scale.set(requiredSize.x, requiredSize.y, group.scale.z);
+                return;
             }
+            this.keyPointsGroup.scale.set(requiredSize.x, requiredSize.y, requiredSize.z);
+            this.keyPointsGroup.children.forEach(element => {
+                if (element.name == "cornerKeypoints") {
+                    element.children.forEach(sprite => {
+                        sprite.scale.set(1 / requiredSize.x, 1 / requiredSize.y, 1 / requiredSize.z);
+                    })
+                }
+                if(element.name == "edgeKeypoints") {
+                    element.children[0].scale.set(1/requiredSize.x,1 ,1)
+                    element.children[1].scale.set(1/requiredSize.x ,1,1)
+                    element.children[2].scale.set(1,1 /requiredSize.y,1)
+                    element.children[3].scale.set(1 ,1/requiredSize.y,1)
+                }
+            });
         });
     }
 
     rotateTo(requiredAzimuth) {
         this.azimuth = requiredAzimuth;
-        console.log(requiredAzimuth);
         this.modelGroup.children.forEach((elem) => {
             elem.rotation.set(0, 0, requiredAzimuth);
         });
@@ -104,6 +122,7 @@ class RoofBlock {
         this.position.set(newPosition.x, newPosition.y);
         this.modelGroup.position.setX(newPosition.x);
         this.modelGroup.position.setY(newPosition.y);
+        this.modelGroup.updateMatrixWorld();
     }
 
 }
@@ -183,7 +202,6 @@ export class ValbovaBlock extends RoofBlock {
 
     setDepthValb(requiredDepth) {
         this.depthValb = requiredDepth;
-        console.log(requiredDepth, this.baseSize.x, requiredDepth / this.baseSize.x);
         changeValb(this.roofGroup, requiredDepth / this.baseSize.x);
 
     }
@@ -227,7 +245,7 @@ export class PultovaBlock extends RoofBlock {
         g.userData.hoverColor = roofHoverColor;
         g.userData.mainColor = roofColor;
         g.position.setZ(this.baseSize.z);
-        //g.scale.set(this.baseSize.x, this.baseSize.y, this.heightRoof);
+        g.scale.set(this.baseSize.x, this.baseSize.y, this.heightRoof);
         return g;
     }
 

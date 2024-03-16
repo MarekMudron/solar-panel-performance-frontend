@@ -10,7 +10,7 @@
         toggleMode,
     } from "$lib/three-resources/Interface.js";
 
-    import { useRotate2d } from "$lib/three-resources/ToolSet.js";
+    import {callUndo, callRedo} from "$lib/three-resources/UndoRedo.js";
 
     let canv3d;
     export let texture;
@@ -63,16 +63,17 @@
         class="btn btn-primary btn-block mb-2"
         on:click={() => drawPultova()}>Pultova strecha</button
     >
+
     <button
         type="button"
-        class="btn btn-primary btn-block mb-2" disabled
-        on:click={() => useRotate2d()}>Rotate 2d</button
+        class="btn btn-secondary btn-block mb-2"
+        on:click={() => callUndo()}>Undo</button
     >
 
     <button
         type="button"
-        class="btn btn-primary btn-block mb-2" disabled
-        on:click={() => {}}>Move 2d</button
+        class="btn btn-secondary btn-block mb-2"
+        on:click={() => callRedo()}>Redo</button
     >
     <!--    <button
         type="button"

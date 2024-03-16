@@ -2,7 +2,9 @@ import { canvas } from "$lib/three-resources/Canvas.js"
 import { getMapPlanePosition } from "$lib/three-resources/Raycaster.js"
 import { add, scene } from "$lib/three-resources/Scene.js"
 import { LineBasicMaterial, BufferGeometry, Line, Vector3 } from "three";
-import {addBlock} from "./Site"
+import {addBlock, removeBlock} from "./Site"
+import { activateKeypoints } from "./Keypoints";
+import { addOp } from "./UndoRedo";
 let blockFactoryFunc;
 
 export function activate(blockFactoryFunc_) {
@@ -20,7 +22,7 @@ function makeLine(start3d, end3d) {
     return line;
 }
 
-function makePlane(line) {
+function makeBlock(line) {
     pointBetween = new Vector3();
     pointBetween.lerpVectors(endPoint, startPoint, 0.5);
     let block = blockFactoryFunc(line.userData.length, line.userData.angle)
@@ -45,7 +47,7 @@ function updateEndPointAndLen(line, endPos) {
 }
 
 let currentLine;
-let currentPlane;
+let currentBlock;
 let startPoint;
 let endPoint;
 let pointBetween;
@@ -65,24 +67,25 @@ function pointLineDistance(point) {
     return [p.distanceTo(point), point.sub(p)]
 }
 
-function rectMove() {
+function blockMove() {
     let currentPoint = getMapPlanePosition();
     let [dist, vec] = pointLineDistance(currentPoint)
-    let s = currentPlane.baseSize.clone();
+    let s = currentBlock.baseSize.clone();
     s.y = dist
-    currentPlane.setModelSize(s)
+    currentBlock.setModelSize(s)
     let pb = pointBetween.clone();
     pb.add(vec.multiplyScalar(0.5));
-    currentPlane.moveHorizontally(pb)
+    currentBlock.moveHorizontally(pb)
 }
 
 function drawRect() {
     canvas.removeEventListener("pointermove", lineMove)
-    currentPlane = makePlane(currentLine)
+    currentBlock = makeBlock(currentLine)
     scene.remove(currentLine);
 
-    addBlock(currentPlane)
-    canvas.addEventListener("pointermove", rectMove)
+    addBlock(currentBlock)
+    addOp((block) => addBlock(block), (block) => {removeBlock(block)}, currentBlock);
+    canvas.addEventListener("pointermove", blockMove)
     canvas.addEventListener("pointerup", finishRect);
     canvas.removeEventListener("pointerup", drawRect);
 }
@@ -99,5 +102,6 @@ function drawLine() {
 function finishRect() {
     
     canvas.removeEventListener("pointerup", finishRect);
-    canvas.removeEventListener("pointermove", rectMove);
+    canvas.removeEventListener("pointermove", blockMove);
+    activateKeypoints();
 }

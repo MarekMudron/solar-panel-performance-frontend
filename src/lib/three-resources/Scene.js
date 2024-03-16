@@ -15,6 +15,11 @@ export function add(model) {
     scene.add(model);
 }
 
+export function remove(model) {
+    scene.remove(model);
+}
+
+
 export function display3d() {
     modelsTo3d()
 }

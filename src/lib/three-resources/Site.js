@@ -1,4 +1,4 @@
-import {add} from "./Scene"
+import {add, remove} from "./Scene"
 let blocks = []
 
 export function addBlock(block) {
@@ -8,7 +8,8 @@ add(block.modelGroup)
 
 
 export function removeBlock(block) {
-	this.blocks = this.blocks.filter(item => item !== block);
+	blocks = blocks.filter(item => item !== block);
+	remove(block.modelGroup)
 }
 
 export function modelsTo3d() {

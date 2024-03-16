@@ -19,6 +19,7 @@ export function moveCameraToPrevPos() {
 
 export function setup(canvas_) {
     canvas = canvas_
+
     renderer = new WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
     renderer.setPixelRatio(
         (window.devicePixelRatio)
@@ -37,12 +38,8 @@ export function setup(canvas_) {
     camera.up.set(0, 0, 1);
     camera.layers.enableAll();
 
-
-
-
     Scene.setup()
     Controls.setup(camera, canvas);
-
 
     window.addEventListener("resize", onWindowResize)
     update();

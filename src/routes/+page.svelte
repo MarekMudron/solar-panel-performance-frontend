@@ -17,7 +17,6 @@
     }
 
     function locationChosen(e) {
-        console.log("LOCSET", e.detail);
         currentLocation.set(e.detail);
     }
 </script>

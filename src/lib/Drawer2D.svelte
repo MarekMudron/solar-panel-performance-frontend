@@ -37,7 +37,6 @@
     }
 
     export function activate(componentType) {
-        console.log(componentType);
         canv.addEventListener("pointermove", lineMove);
         canv.addEventListener("pointerup", drawLine);
     }

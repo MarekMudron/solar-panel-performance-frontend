@@ -94,7 +94,6 @@ let searchInput;
     function chosen(event) {
         query = event.detail.selection.value.data.name;
         address = event.detail.selection.value.data;
-        console.log(address);
         dispatch("chosen");
     }
 

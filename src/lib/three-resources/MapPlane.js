@@ -6,7 +6,6 @@ export let mapPlane;
 export function initMapPlane(img, dimMeters) {
     const geometry = new PlaneGeometry(dimMeters, dimMeters);
     mapPlane = new Mesh(geometry, new MeshBasicMaterial({ visible: true }));
-    console.log(img);
     let texture = new TextureLoader().load(img.src);
     texture.colorSpace = SRGBColorSpace;
     mapPlane.material.map = texture

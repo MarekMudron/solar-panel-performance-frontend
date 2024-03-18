@@ -1,7 +1,7 @@
 import { activate } from "$lib/three-resources/Drawer2d.js"
 import { createIhlanova, createPultova, createSedlova, createValbova } from "./BlockFactory";
-import { deactivate2dKeypoints } from "./Keypoints2d.js";
-import { deactivate3dKeypoints } from "./Keypoints3d.js";
+import { deactivate2dKeypoints } from "./keypoints-2d/Keypoints2d.js";
+import { deactivate3dKeypoints } from "./keypoints-3d/Keypoints3d.js";
 import { toggleMode as toggleViewMode } from "./Mode.js";
 
 export function drawSedlova() {

@@ -122,6 +122,7 @@ function getValb() {
 	geometry.setIndex(new THREE.BufferAttribute(indices, 1));
 	const material = new THREE.MeshBasicMaterial({ color: roofColor });
 	const valb = new THREE.Mesh(geometry, material);
+	valb.name = "Valb";
 	return valb;
 }
 

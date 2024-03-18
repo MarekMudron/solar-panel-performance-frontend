@@ -1,15 +1,18 @@
-import { Sprite, SpriteMaterial, BufferGeometry, Vector3, PlaneGeometry, MeshBasicMaterial, Mesh, DoubleSide, Group, Line } from "three";
-import { getMapPlanePosition } from "./Raycaster";
-import { getSprite } from "./polygonFactory";
-import { add } from "./Scene";
-import { Vector } from "two.js/src/vector";
-import { addOp } from "./UndoRedo";
+import { Vector3, PlaneGeometry, MeshBasicMaterial, Mesh, DoubleSide, Group } from "three";
+import { getMapPlanePosition } from "../Raycaster";
+import { addOp } from "../UndoRedo";
 
 
 export class EdgeKeypoints {
     constructor(block) {
         this.block = block;
         this.model = this.initModel();
+        this.block.addEventListener("resize", (requiredSize) => {
+            this.model.children[0].scale.set(1/requiredSize.x,1 ,1)
+            this.model.children[1].scale.set(1/requiredSize.x ,1,1)
+            this.model.children[2].scale.set(1,1 /requiredSize.y,1)
+            this.model.children[3].scale.set(1 ,1/requiredSize.y,1)
+        })
     }
 
 

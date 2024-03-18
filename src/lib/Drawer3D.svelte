@@ -9,8 +9,10 @@
         drawValbova,
         toggleMode,
     } from "$lib/three-resources/Interface.js";
-
-    import {callUndo, callRedo} from "$lib/three-resources/UndoRedo.js";
+    import { addPanel, panels } from "$lib/three-resources/Panels.js";
+    import { callUndo, callRedo } from "$lib/three-resources/UndoRedo.js";
+    import { panelArray } from "../stores";
+    import { is2d } from "$lib/three-resources/Mode.js";
 
     let canv3d;
     export let texture;
@@ -29,6 +31,29 @@
             initMapPlane(texture, texture.width * pxToMeter);
         }
     }
+
+    import { navigate } from "svelte-routing";
+    import { NoToneMapping } from "three";
+
+    function simulate() {
+        let serialized = panels.map((panel) => {
+            return {
+                azimuth: panel.euler.z,
+                tilt: panel.euler.x,
+                nameplate: 0.5,
+                gamma_pdc: 0.001,
+            };
+        });
+        panelArray.set(serialized);
+    }
+
+    let visible2d, visible3d;
+
+    $: {
+        visible2d = $is2d ? 'block':'none';
+        visible3d = $is2d ? 'none':'block';
+    }
+
 </script>
 
 <canvas
@@ -40,30 +65,40 @@
 <div class="vstack position-absolute top-50 start-0 translate-middle-y">
     <button
         type="button"
-        class="btn btn-primary btn-block mb-2"
+        class="btn btn-dark btn-block mb-2"
+       
         on:click={() => toggleMode()}>2d/3d</button
     >
     <button
         type="button"
         class="btn btn-primary btn-block mb-2"
+        style="display:{visible2d}"
         on:click={() => drawSedlova()}>Sedlova strecha</button
     >
     <button
         type="button"
         class="btn btn-primary btn-block mb-2"
+        style="display:{visible2d}"
         on:click={() => drawIhlanova()}>Ihlanova strecha</button
     >
     <button
         type="button"
         class="btn btn-primary btn-block mb-2"
+        style="display:{visible2d}"
         on:click={() => drawValbova()}>Valbova strecha</button
     >
     <button
         type="button"
         class="btn btn-primary btn-block mb-2"
+        style="display:{visible2d}"
         on:click={() => drawPultova()}>Pultova strecha</button
     >
-
+    <button
+        type="button"
+        class="btn btn-warning btn-block mb-2"
+        style="display:{visible3d}"
+        on:click={() => addPanel()}>Add Panel</button
+    >
     <button
         type="button"
         class="btn btn-secondary btn-block mb-2"
@@ -75,39 +110,13 @@
         class="btn btn-secondary btn-block mb-2"
         on:click={() => callRedo()}>Redo</button
     >
-    <!--    <button
+
+    <a
         type="button"
-        class="btn btn-primary btn-block mb-2"
-        on:click={() => activateCommand(COMMANDS.addSedlova)}>Building Height</button
+        class="btn btn-success btn-block mb-2"
+        href="/simulation"
+        on:click={() => {
+            simulate();
+        }}>Simulate</a
     >
-    <button
-        type="button"
-        class="btn btn-primary btn-block mb-2"
-        on:click={() => activateCommand(COMMANDS.addSedlova)}>Rotate</button
-    >
-    <button
-        type="button"
-        class="btn btn-primary btn-block mb-2"
-        on:click={() => activateCommand(COMMANDS.addSedlova)}>Resize</button
-    >
-    <button
-        type="button"
-        class="btn btn-primary btn-block mb-2"
-        on:click={() => activateCommand(COMMANDS.addSedlova)}>Move</button
-    >
-    <button
-        type="button"
-        class="btn btn-primary btn-block mb-2"
-        on:click={() => activateCommand(COMMANDS.addSedlova)}>Valb</button
-    >
-    <button
-        type="button"
-        class="btn btn-secondary btn-block mb-2"
-        on:click={() => activateCommand(COMMANDS.addSedlova)}>Add Panel</button
-    >
-    <button
-        type="button"
-        class="btn btn-secondary btn-block mb-2"
-        on:click={() => activateCommand(COMMANDS.addSedlova)}>Move Panel</button
-    > -->
 </div>

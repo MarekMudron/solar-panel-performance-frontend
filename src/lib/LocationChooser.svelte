@@ -3,7 +3,7 @@
     import L from "leaflet";
 
     let currentCoords;
-    export let inputCoords = [49,17];
+    export let inputCoords = [49, 17];
 
     let map;
     let mainLayer;
@@ -134,17 +134,29 @@
         currentMarker = L.centerMarker(map);
         map.on("moveend", function (e) {
             let c = map.getCenter();
-            currentCoords = [c.lat, c.lng];
+            currentCoords = { lat: c.lat, lon: c.lng };
             setCursorPosition();
         });
     }
 
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher } from "svelte";
 
     const dispatch = createEventDispatcher();
 
-    function setCursorPosition() {
-        dispatch("chosen", currentCoords)
+    async function getAltitude(lon, lat) {
+        return fetch(
+            `https://api.mapy.cz/v1/elevation?lang=cs&positions=${lon}%2C${lat}&apikey=${$API_KEY}`,
+        )
+            .then((response) => response.json())
+            .then((data) => {
+                // Získání výšky z odpovědi API
+                return data.items[0].elevation;
+            });
+    }
+
+    async function setCursorPosition() {
+        currentCoords.alt = await getAltitude(currentCoords.lon, currentCoords.lat);
+        dispatch("chosen", currentCoords);
     }
 
     function changeInputPos() {
@@ -153,10 +165,8 @@
 
     $: {
         inputCoords;
-        if(map)
-            changeInputPos();
+        if (map) changeInputPos();
     }
-
 </script>
 
 <div

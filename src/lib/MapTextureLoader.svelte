@@ -69,6 +69,10 @@
             document.getElementById("map-element").remove();
         });
     }
+
+    onMount(() => {
+        console.log("mountTexture");
+    });
 </script>
 
 <div

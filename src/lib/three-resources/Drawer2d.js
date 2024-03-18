@@ -3,7 +3,7 @@ import { getMapPlanePosition } from "$lib/three-resources/Raycaster.js"
 import { add, scene } from "$lib/three-resources/Scene.js"
 import { LineBasicMaterial, BufferGeometry, Line, Vector3 } from "three";
 import {addBlock, removeBlock} from "./Site"
-import { activate2dKeypoints } from "./Keypoints2d.js";
+import { activate2dKeypoints } from "./keypoints-2d/Keypoints2d.js";
 import { addOp } from "./UndoRedo";
 let blockFactoryFunc;
 

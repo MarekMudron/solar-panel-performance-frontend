@@ -1,8 +1,8 @@
 import * as THREE from "three"
 import { MathUtils } from "three";
 import * as polygonFactory from "./polygonFactory.js";
-import { createKeypoints } from "./Keypoints2d.js";
-import { createRoofKeypoints } from "./Keypoints3d.js";
+import { createKeypoints } from "./keypoints-2d/Keypoints2d.js";
+import { createRoofKeypoints } from "./keypoints-3d/Keypoints3d.js";
 
 
 const baseColor = 0x003049;
@@ -45,6 +45,7 @@ class RoofBlock {
         if (this.constructor === RoofBlock) {
             throw new Error("Cannot instantiate abstract class");
         }
+        this.listeners = new Map();
         this.baseSize = baseSize;			// Vec3
         this.azimuth = azimuth;				// float
         this.heightRoof = heightRoof;		// float
@@ -56,6 +57,23 @@ class RoofBlock {
         this.modelGroup.add(this.keyPointsGroup);
         this.as2d()
         this.moveHorizontally(pos2d);
+
+    }
+
+    addEventListener(event, callback) {
+        if (!(this.listeners.has(event))) {
+            this.listeners.set(event, []);
+        }
+        this.listeners.get(event).push(callback);
+    }
+
+    emitEvent(event, ...args) {
+        const eventListeners = this.listeners.get(event);
+        if (eventListeners) {
+            eventListeners.forEach(callback => {
+                callback(...args);
+            });
+        }
     }
 
     initBase2d() {
@@ -95,26 +113,9 @@ class RoofBlock {
                 group.scale.set(requiredSize.x, requiredSize.y, group.scale.z);
                 return;
             }
-            this.keyPointsGroup.scale.set(requiredSize.x, requiredSize.y, requiredSize.z);
-            this.keyPointsGroup.children.forEach(element => {
-                if (element.name == "cornerKeypoints") {
-                    element.children.forEach(sprite => {
-                        sprite.scale.set(1 / requiredSize.x, 1 / requiredSize.y, 1 / requiredSize.z);
-                    })
-                }
-                if(element.name == "edgeKeypoints") {
-                    element.children[0].scale.set(1/requiredSize.x,1 ,1)
-                    element.children[1].scale.set(1/requiredSize.x ,1,1)
-                    element.children[2].scale.set(1,1 /requiredSize.y,1)
-                    element.children[3].scale.set(1 ,1/requiredSize.y,1)
-                }
-            });
-            this.roofKeyPointsGroup.children.forEach(element => {
-                if (element.name == "stitKeypoint") {
-                    element.scale.set(1, 0.3 / requiredSize.y, 0.3 / this.heightRoof);
-                }
-            });
+            this.keyPointsGroup.scale.set(requiredSize.x, requiredSize.y, requiredSize.z)
         });
+        this.emitEvent("resize", requiredSize)
     }
 
     rotateTo(requiredAzimuth) {
@@ -132,27 +133,23 @@ class RoofBlock {
     }
 
     setHeightRoof(requiredHeight) {
-		this.heightRoof = requiredHeight;
-		this.roofGroup.scale.setZ(requiredHeight);
-        this.roofKeyPointsGroup.children.forEach(element => {
-            if (element.name == "stitKeypoint") {
-                element.scale.setZ( 0.3 / requiredHeight);
-            }
-        });
-	}
+        this.heightRoof = requiredHeight;
+        this.roofGroup.scale.setZ(requiredHeight);
+        this.emitEvent("roofResize", requiredHeight)
+    }
 
     setBaseHeight(requiredHeight) {
-		this.baseSize.z = requiredHeight;
-		this.modelGroup.children.forEach(group => {
-			if (group.userData.isBase) {
-				group.scale.setZ(requiredHeight);
-				group.position.setZ(requiredHeight / 2);
-			}
-			if (group.userData.isRoof) {
-				group.position.setZ(requiredHeight);
-			}
-		});
-	}
+        this.baseSize.z = requiredHeight;
+        this.modelGroup.children.forEach(group => {
+            if (group.userData.isBase) {
+                group.scale.setZ(requiredHeight);
+                group.position.setZ(requiredHeight / 2);
+            }
+            if (group.userData.isRoof) {
+                group.position.setZ(requiredHeight);
+            }
+        });
+    }
 
 
 }
@@ -188,6 +185,22 @@ export class SedlovaBlock extends RoofBlock {
         g.scale.set(this.baseSize.x, this.baseSize.y, this.heightRoof);
         return g;
     }
+
+    alignPanel(panel, intersectFaceIndex) {
+		if(![0,1,2,3].includes(intersectFaceIndex)) {
+			return false;
+		}
+		var euler;
+		if([0,1].includes(intersectFaceIndex)) {
+			euler = new THREE.Euler(MathUtils.degToRad(getAngleDeg(this.heightRoof, this.baseSize.y/2)),0,0, "ZXY");
+		}else if([2,3].includes(intersectFaceIndex)) {
+			euler = new THREE.Euler(MathUtils.degToRad(-getAngleDeg(this.heightRoof, this.baseSize.y/2)),0,0, "ZXY");
+		}
+		euler.z = this.azimuth;
+		panel.euler = euler;
+		panel.model.setRotationFromEuler(euler);
+        return true;
+	}
 }
 
 
@@ -197,6 +210,8 @@ export class IhlanovaBlock extends RoofBlock {
         this.roofGroup = this.initRoof();	// Group consisting of wireframe and filling
         this.modelGroup.add(this.roofGroup);
         this.rotateTo(azimuth)
+        this.roofKeyPointsGroup = createRoofKeypoints(this);
+        this.roofGroup.add(this.roofKeyPointsGroup);
     }
 
     initRoof() {
@@ -226,13 +241,17 @@ export class ValbovaBlock extends RoofBlock {
         this.depthValb = depthValb
         this.roofGroup = this.initRoof();	// Group consisting of wireframe and filling
         this.modelGroup.add(this.roofGroup);
+        
         this.setDepthValb(depthValb);
         this.rotateTo(azimuth)
+        this.roofKeyPointsGroup = createRoofKeypoints(this);
+        this.roofGroup.add(this.roofKeyPointsGroup);
     }
 
     setDepthValb(requiredDepth) {
         this.depthValb = requiredDepth;
         changeValb(this.roofGroup, requiredDepth / this.baseSize.x);
+        this.emitEvent("valbChange", requiredDepth)
 
     }
 
@@ -250,6 +269,7 @@ export class ValbovaBlock extends RoofBlock {
         g.userData.mainColor = roofColor;
         g.position.setZ(this.baseSize.z);
         g.scale.set(this.baseSize.x, this.baseSize.y, this.heightRoof);
+        
         return g;
     }
 }
@@ -260,6 +280,8 @@ export class PultovaBlock extends RoofBlock {
         this.roofGroup = this.initRoof();	// Group consisting of wireframe and filling
         this.modelGroup.add(this.roofGroup);
         this.rotateTo(azimuth)
+        this.roofKeyPointsGroup = createRoofKeypoints(this);
+        this.roofGroup.add(this.roofKeyPointsGroup);
     }
 
     initRoof() {
@@ -269,6 +291,7 @@ export class PultovaBlock extends RoofBlock {
         var geo = new THREE.EdgesGeometry(pultFilling.geometry);
         var mat = new THREE.LineBasicMaterial({ color: 0x000000 });
         var wireframe = new THREE.LineSegments(geo, mat);
+        wireframe.name = "linesegments"
         g.add(wireframe);
         g.userData.isRoof = true;
         g.userData.isBase = false;

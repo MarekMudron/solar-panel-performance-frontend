@@ -1,5 +1,5 @@
 import {add, remove} from "./Scene"
-let blocks = []
+export let blocks = []
 
 export function addBlock(block) {
 	blocks.push(block);

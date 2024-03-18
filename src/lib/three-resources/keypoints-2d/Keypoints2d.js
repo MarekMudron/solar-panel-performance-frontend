@@ -1,7 +1,7 @@
-import { getMapPlanePosition, getPlaneKeypointsIntersect } from "./Raycaster.js"
+import { getMapPlanePosition, getPlaneKeypointsIntersect } from "../Raycaster.js"
 import { Group, Plane,SpriteMaterial, Sprite,MeshBasicMaterial, DoubleSide, PlaneGeometry, Mesh } from "three"
-import { canvas } from "./Canvas.js"
-import { add } from "./Scene.js";
+import { canvas } from "../Canvas.js"
+import { add } from "../Scene.js";
 import { PlaneKeypoint } from "./PlaneKeypoints.js";
 import { CornerKeypoints } from "./CornerKeypoints.js";
 import { EdgeKeypoints } from "./EdgeKeypoints.js";

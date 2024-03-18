@@ -5,19 +5,24 @@
     import { currentLocation } from "../stores";
 
     let address;
-    let addressCoords = [49, 16];
+    let addressCoords;
 
     let options = {
         enableHighAccuracy: true,
     };
 
     function addressChosen() {
-        addressCoords = [address.position.lat, address.position.lon];
-        currentLocation.set(addressCoords);
+        addressCoords = {lat:address.position.lat, lon:address.position.lon};
     }
 
     function locationChosen(e) {
-        currentLocation.set(e.detail);
+        console.log("Chosen location: ",e.detail);
+        let loc = {
+            lat:e.detail.lat,
+            lon:e.detail.lon,
+            alt:e.detail.alt,
+        }
+        currentLocation.set(loc);
     }
 </script>
 
@@ -25,7 +30,7 @@
     getPosition
     {options}
     on:position={(e) => {
-        addressCoords = [e.detail.coords.latitude, e.detail.coords.longitude];
+        addressCoords = {lat:e.detail.coords.latitude ,lon:e.detail.coords.longitude}
     }}
 />
 

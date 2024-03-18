@@ -1,12 +1,17 @@
 import { Sprite, SpriteMaterial, Vector3, Group } from "three";
-import { getMapPlanePosition } from "./Raycaster";
-import { addOp } from "./UndoRedo";
+import { getMapPlanePosition } from "../Raycaster";
+import { addOp } from "../UndoRedo";
 
 
 export class CornerKeypoints {
     constructor(block) {
         this.block = block;
         this.model = this.initModel();
+        this.block.addEventListener("resize", (requiredSize) => {
+            this.model.children.forEach(sprite => {
+                sprite.scale.set(1 / requiredSize.x, 1 / requiredSize.y, 1 / requiredSize.z);
+            })
+        })
     }
 
     initModel() {

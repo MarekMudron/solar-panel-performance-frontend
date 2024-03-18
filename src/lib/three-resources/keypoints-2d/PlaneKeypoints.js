@@ -1,12 +1,13 @@
 import { PlaneGeometry,MeshBasicMaterial, Mesh, DoubleSide } from "three";
-import { getMapPlanePosition } from "./Raycaster";
-import { addOp } from "./UndoRedo";
+import { getMapPlanePosition } from "../Raycaster";
+import { addOp } from "../UndoRedo";
 
 
 export class PlaneKeypoint {
     constructor(block) {
         this.block = block;
         this.model = this.initModel();
+       
     }
 
     initModel() {

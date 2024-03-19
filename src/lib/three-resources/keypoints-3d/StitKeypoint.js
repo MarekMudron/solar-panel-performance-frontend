@@ -1,7 +1,7 @@
 import {SedlovaBlock, ValbovaBlock, PultovaBlock, IhlanovaBlock} from "../Blocks"
-import { BoxGeometry, Mesh, MeshBasicMaterial, Sprite, SpriteMaterial } from "three";
+import { BoxGeometry, Color, Mesh, MeshBasicMaterial, Sprite, SpriteMaterial, Vector3 } from "three";
 import { add, remove } from "../Scene";
-import { getPerpendilarPlane } from "../polygonFactory";
+import { getPerpendilarPlane, getSphere } from "../polygonFactory";
 import { addOp } from "../UndoRedo";
 import { getIntersectWithMesh } from "../Raycaster";
 import { camera } from "../Canvas";
@@ -43,30 +43,38 @@ export class StitKeypoint {
     initModel() {
         if (this.block instanceof SedlovaBlock) {
             const geometry = new BoxGeometry(1, 1, 1);
-            const material = new MeshBasicMaterial({ color: 0x00ff00 });
+            const material = new MeshBasicMaterial();
             const cube = new Mesh(geometry, material);
             // cube.renderOrder = 10 || 999;
             // cube.material.depthTest = false;
             // cube.material.depthWrite = false;
+            cube.userData.hoverColor = new Color(0x104d70)
+            cube.userData.color = new Color(0x00bbd4)
+            cube.material.color = new Color(0x00bbd4)
             cube.position.setZ(1)
             cube.visible = false;
             cube.name = "stitKeypoint"
             cube.scale.set(1, 1, 1)
             return cube;
         } else if (this.block instanceof IhlanovaBlock) {
-            const material = new SpriteMaterial({ color: 0x00ff00 });
-            let sprite = new Sprite(material);
+            let sprite = getSphere(new Vector3())
             sprite.name = "stitKeypoint"
+            sprite.userData.hoverColor = new Color(0x104d70)
+            sprite.userData.color = new Color(0x00bbd4)
+            sprite.material.color = new Color(0x00bbd4)
             sprite.position.setZ(1);
-            sprite.scale.set(0.3, 0.3, 0.3)
+            sprite.scale.set(1, 1, 1)
             return sprite
         } else if (this.block instanceof ValbovaBlock) {
             const geometry = new BoxGeometry(1, 1, 1);
-            const material = new MeshBasicMaterial({ color: 0x00ff00 });
+            const material = new MeshBasicMaterial();
             const cube = new Mesh(geometry, material);
             // cube.renderOrder = 10 || 999;
             // cube.material.depthTest = false;
             // cube.material.depthWrite = false;
+            cube.userData.hoverColor = new Color(0x104d70)
+            cube.userData.color = new Color(0x00bbd4)
+            cube.material.color = new Color(0x00bbd4)
             cube.position.setZ(1)
             cube.visible = false;
             cube.name = "stitKeypoint"
@@ -75,11 +83,14 @@ export class StitKeypoint {
         }
         else if (this.block instanceof PultovaBlock) {
             const geometry = new BoxGeometry(1, 1, 1);
-            const material = new MeshBasicMaterial({ color: 0x00ff00 });
+            const material = new MeshBasicMaterial();
             const cube = new Mesh(geometry, material);
             // cube.renderOrder = 10 || 999;
             // cube.material.depthTest = false;
             // cube.material.depthWrite = false;
+            cube.userData.hoverColor = new Color(0x104d70)
+            cube.userData.color = new Color(0x00bbd4)
+            cube.material.color = new Color(0x00bbd4)
             cube.position.setZ(1)
             cube.position.setX(-1 / 2)
             cube.visible = false;

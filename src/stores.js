@@ -6,4 +6,6 @@ export const currentLocation = writable({});
 
 export const panelArray = writable([])
 
+export const currentStage = writable(0)
+
 

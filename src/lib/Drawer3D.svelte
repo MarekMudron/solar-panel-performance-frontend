@@ -50,25 +50,44 @@
     let visible2d, visible3d;
 
     $: {
-        visible2d = $is2d ? 'block':'none';
-        visible3d = $is2d ? 'none':'block';
+        visible2d = $is2d ? "block" : "none";
+        visible3d = $is2d ? "none" : "block";
     }
-
 </script>
 
 <canvas
-    style="height:100%; width:100%; z-index:20; display:block"
-    id="canv3d"
+    id="canvas"
+    class="border"
+    style="height:100%; width:100%; z-index:20; display:block; background-color:#ffd4e7"
     bind:this={canv3d}
 ></canvas>
 
-<div class="vstack position-absolute top-50 start-0 translate-middle-y">
+<div
+    class="hstack position-absolute start-0 translate-middle-y"
+    style="top:100px;"
+>
     <button
         type="button"
-        class="btn btn-dark btn-block mb-2"
-       
+        class="btn btn-secondary btn-block mb-2"
+        on:click={() => callUndo()}>Undo</button
+    >
+
+    <button
+        type="button"
+        class="btn btn-secondary btn-block mb-2"
+        on:click={() => callRedo()}>Redo</button
+    >
+</div>
+
+<button
+        type="button"
+        class="btn btn-dark btn-block mb-2 position-absolute end-0 translate-middle-y"
+        style="top:100px"
         on:click={() => toggleMode()}>2d/3d</button
     >
+
+<div class="vstack position-absolute top-50 start-0 translate-middle-y">
+    
     <button
         type="button"
         class="btn btn-primary btn-block mb-2"
@@ -93,30 +112,19 @@
         style="display:{visible2d}"
         on:click={() => drawPultova()}>Pultova strecha</button
     >
-    <button
+    <!-- <button
         type="button"
         class="btn btn-warning btn-block mb-2"
         style="display:{visible3d}"
         on:click={() => addPanel()}>Add Panel</button
-    >
-    <button
-        type="button"
-        class="btn btn-secondary btn-block mb-2"
-        on:click={() => callUndo()}>Undo</button
-    >
+    > -->
 
-    <button
-        type="button"
-        class="btn btn-secondary btn-block mb-2"
-        on:click={() => callRedo()}>Redo</button
-    >
-
-    <a
+    <!-- <a
         type="button"
         class="btn btn-success btn-block mb-2"
         href="/simulation"
         on:click={() => {
             simulate();
         }}>Simulate</a
-    >
+    > -->
 </div>

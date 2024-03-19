@@ -1,4 +1,4 @@
-import { Vector3, PlaneGeometry, MeshBasicMaterial, Mesh, DoubleSide, Group } from "three";
+import { Vector3, PlaneGeometry, MeshBasicMaterial, Mesh, DoubleSide, Group, Color } from "three";
 import { getMapPlanePosition } from "../Raycaster";
 import { addOp } from "../UndoRedo";
 
@@ -19,35 +19,47 @@ export class EdgeKeypoints {
     initModel() {
         let g = new Group();
         g.name = "edgeKeypoints"
-        let geometry = new PlaneGeometry(0.3, 1);
-        const material = new MeshBasicMaterial({ visible: true, color: 0xffff00, side: DoubleSide });
+        let geometry = new PlaneGeometry(0.5, 1);
+        let material = new MeshBasicMaterial({ visible: true, side: DoubleSide });
         let plane = new Mesh(geometry, material);
         plane.name = "Edge Mesh"
-        plane.renderOrder = 10 || 999;
+        plane.renderOrder = 11
         plane.material.depthTest = false;
         plane.material.depthWrite = false;
         plane.position.setZ(0);
         plane.position.setX(1 / 2)
+        plane.userData.hoverColor = new Color(0x104d70)
+        plane.userData.color = new Color(0x00bbd4)
+        plane.material.color = new Color(0x00bbd4)
         plane.userData.lineIndex = 0
         plane.updateMatrixWorld()
         g.add(plane);
-        geometry = new PlaneGeometry(0.3, 1);
+
+        geometry = new PlaneGeometry(0.5, 1);
+        material = new MeshBasicMaterial({ visible: true, side: DoubleSide });
         plane = new Mesh(geometry, material);
         plane.name = "Edge Mesh"
-        plane.renderOrder = 10 || 999;
+        plane.renderOrder = 11
         plane.material.depthTest = false;
         plane.material.depthWrite = false;
+        plane.userData.hoverColor = new Color(0x104d70)
+        plane.userData.color = new Color(0x00bbd4)
+        plane.material.color = new Color(0x00bbd4)
         plane.position.setZ(0);
         plane.position.setX(-1 / 2)
         plane.userData.lineIndex = 1
         plane.updateMatrixWorld()
         g.add(plane);
 
-        geometry = new PlaneGeometry(1, 0.3);
+        geometry = new PlaneGeometry(1, 0.5);
+        material = new MeshBasicMaterial({ visible: true,  side: DoubleSide });
         plane = new Mesh(geometry, material);
         plane.name = "Edge Mesh"
-        plane.renderOrder = 10 || 999;
+        plane.renderOrder = 11
         plane.material.depthTest = false;
+        plane.userData.hoverColor = new Color(0x104d70)
+        plane.userData.color = new Color(0x00bbd4)
+        plane.material.color = new Color(0x00bbd4)
         plane.material.depthWrite = false;
         plane.position.setZ(0);
         plane.position.setY(-1 / 2)
@@ -55,12 +67,16 @@ export class EdgeKeypoints {
         plane.updateMatrixWorld()
         g.add(plane);
 
-        geometry = new PlaneGeometry(1, 0.3);
+        geometry = new PlaneGeometry(1, 0.5);
+        material = new MeshBasicMaterial({ visible: true,  side: DoubleSide });
         plane = new Mesh(geometry, material);
         plane.name = "Edge Mesh"
-        plane.renderOrder = 10 || 999;
+        plane.renderOrder = 11
         plane.material.depthTest = false;
         plane.material.depthWrite = false;
+        plane.userData.hoverColor = new Color(0x104d70)
+        plane.userData.color = new Color(0x00bbd4)
+        plane.material.color = new Color(0x00bbd4)
         plane.position.setZ(0);
         plane.position.setY(1 / 2)
         plane.updateMatrixWorld()

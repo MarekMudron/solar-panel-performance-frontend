@@ -12,10 +12,10 @@ export class PlaneKeypoint {
 
     initModel() {
         const geometry = new PlaneGeometry(1, 1);
-        const material = new MeshBasicMaterial({ visible: false, color: 0xffff00, side: DoubleSide });
+        const material = new MeshBasicMaterial({ visible: false, transparent:true, opacity:0.5, color: 0xffffff, side: DoubleSide });
         const plane = new Mesh(geometry, material);
         plane.name = "Keypoint Mesh"
-        plane.renderOrder = 10 || 999;
+        plane.renderOrder = 3;
         plane.material.depthTest = false;
         plane.material.depthWrite = false;
         plane.position.setZ(0);

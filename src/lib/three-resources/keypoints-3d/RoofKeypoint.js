@@ -3,11 +3,15 @@ import { getPerpendilarPlane } from "../polygonFactory";
 import { addOp } from "../UndoRedo";
 import { getIntersectWithMesh } from "../Raycaster";
 import { camera } from "../Canvas";
+import { Color } from "three";
 
 export class RoofKeypoint {
     constructor(block) {
         this.block = block;
         this.model = this.block.roofGroup.children[0];
+        this.model.userData.hoverColor = new Color(0x999999)
+        this.model.userData.color = new Color(0x780000)
+        console.log(this.model);
     }
 
 

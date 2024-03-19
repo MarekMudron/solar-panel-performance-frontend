@@ -1,6 +1,7 @@
 import { Sprite, SpriteMaterial, Vector3, Group } from "three";
 import { getMapPlanePosition } from "../Raycaster";
 import { addOp } from "../UndoRedo";
+import { getSphere } from "../polygonFactory";
 
 
 export class CornerKeypoints {
@@ -17,20 +18,12 @@ export class CornerKeypoints {
     initModel() {
         let g = new Group();
         g.userData.isKeyPoints = true;
-        const material = new SpriteMaterial({ color: 0xaabb00 });
-        let sprite = new Sprite(material);
-        sprite.position.set(-1 / 2, 1 / 2, 0);
-        g.add(sprite);
-        sprite = new Sprite(material);
-        sprite.position.set(1 / 2, 1 / 2, 0);
-        g.add(sprite);
-        sprite = new Sprite(material);
-        sprite.position.set(1 / 2, -1 / 2, 0);
-        g.add(sprite);
-        sprite = new Sprite(material);
-        sprite.position.set(-1 / 2, -1 / 2, 0);
-        g.add(sprite);
-        g.add(sprite);
+        g.add(getSphere(new Vector3(-1 / 2, 1 / 2, 0)))
+        g.add(getSphere(new Vector3(1 / 2, 1 / 2, 0)))
+        g.add(getSphere(new Vector3(1 / 2, -1 / 2, 0)))
+        g.add(getSphere(new Vector3(-1 / 2, -1 / 2, 0)))
+        
+
         g.position.setZ(0);
         g.name = "cornerKeypoints";
         return g;

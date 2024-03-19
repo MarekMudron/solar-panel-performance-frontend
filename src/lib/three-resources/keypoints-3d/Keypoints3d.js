@@ -10,7 +10,7 @@ var stitKeypoints = [];
 var roofKeypoints = [];
 
 function startCommand() {
-    
+
     let [intersect, keypoint] = getPlaneKeypointsIntersect(stitKeypoints, keypoint => {
         return [keypoint.model];
     });
@@ -33,6 +33,51 @@ function startCommand() {
     }
 }
 
+let hoveredStit;
+let hoveredRoof;
+
+function feedbackTop() {
+    if (hoveredStit != null) {
+        let [intersect, keypoint] = getPlaneKeypointsIntersect(stitKeypoints, keypoint => {
+            return [keypoint.model];
+        });
+        if (intersect == null) {
+            hoveredStit.material.color = hoveredStit.userData.color
+            hoveredStit = null;
+        }
+    } else {
+        let [intersect, keypoint] = getPlaneKeypointsIntersect(stitKeypoints, keypoint => {
+            return [keypoint.model];
+        });
+        if (intersect != null) {
+            hoveredStit = intersect.object;
+            intersect.object.material.color = intersect.object.userData.hoverColor;
+        }
+    }
+    return false;
+}
+
+function feedbackRoof() {
+    if (hoveredRoof != null) {
+        let [intersect, keypoint] = getPlaneKeypointsIntersect(roofKeypoints, keypoint => {
+            return [keypoint.model];
+        });
+        if (intersect == null) {
+            hoveredRoof.material.color = hoveredRoof.userData.color
+            hoveredRoof = null;
+        }
+    } else {
+        let [intersect, keypoint] = getPlaneKeypointsIntersect(roofKeypoints, keypoint => {
+            return [keypoint.model];
+        });
+        if (intersect != null) {
+            hoveredRoof = intersect.object;
+            intersect.object.material.color = intersect.object.userData.hoverColor;
+        }
+    }
+    return false;
+}
+
 function performCommand() {
     currentOperation.performCommand();
 }
@@ -44,8 +89,16 @@ function finishCommand() {
     canvas.removeEventListener("pointerup", finishCommand);
 }
 
+function feedback() {
+    feedbackTop()
+    if (hoveredStit == null)
+        feedbackRoof();
+}
+
+
 
 export function activate3dKeypoints() {
+    canvas.addEventListener("pointermove", feedback)
     canvas.addEventListener("pointerdown", startCommand);
     stitKeypoints.forEach(keypoint => {
         keypoint.model.visible = true;
@@ -54,6 +107,7 @@ export function activate3dKeypoints() {
 }
 
 export function deactivate3dKeypoints() {
+    canvas.removeEventListener("pointermove", feedback)
     canvas.removeEventListener("pointerdown", startCommand);
     canvas.removeEventListener("pointerup", finishCommand);
     stitKeypoints.forEach(keypoint => {

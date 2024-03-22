@@ -2,7 +2,8 @@
     import AddressChooser from "$lib/AddressChooser.svelte";
     import LocationChooser from "$lib/LocationChooser.svelte";
     import Geolocation from "svelte-geolocation";
-    import { currentLocation } from "../stores";
+    import { currentLocation, currentStage } from "../stores";
+    import { onMount } from "svelte";
 
     let address;
     let addressCoords;
@@ -24,6 +25,8 @@
         }
         currentLocation.set(loc);
     }
+
+
 </script>
 
 <Geolocation

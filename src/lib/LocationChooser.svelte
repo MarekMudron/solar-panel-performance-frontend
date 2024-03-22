@@ -173,4 +173,4 @@
     style="height:600px; width:600px;"
     id="map-element"
     use:initializeMap
-></div>
+><h1>Map</h1></div>

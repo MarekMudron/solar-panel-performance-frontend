@@ -5,7 +5,8 @@
 
     export let centerCoords = [-1, -1];
     const DIM = 2000;
-
+    import {createEventDispatcher} from 'svelte';
+    const dispatch = createEventDispatcher();
     function initializeMap() {
         let map = L.map("map-element");
 
@@ -33,11 +34,12 @@
         if (map.tap) map.tap.disable();
         document.getElementById("map-element").style.cursor = "default";
         screenshot(map);
+        
     }
 
     import leafletImage from "leaflet-image";
 
-    export let texture;
+ let texture;
 
     function get1pxToMeters(map) {
         var centerLatLng = map.getCenter(); // get map center
@@ -59,20 +61,15 @@
         leafletImage(map, function (err, canvas) {
             var img = document.createElement("img");
             pxToMeter = get1pxToMeters(map)
-            img.width = 2000; //{DIM};
-            img.height = 2000; //{DIM};
+            img.width = 3000; //{DIM};
+            img.height = 3000; //{DIM};
             img.src = canvas.toDataURL();
             texture = img;
-
-            //document.getElementById("images").innerHTML = "";
-            //document.getElementById("images").appendChild(img);
-            document.getElementById("map-element").remove();
+            dispatch("onTextureLoaded", texture);
+            //document.getElementById("map-element").remove();
         });
     }
 
-    onMount(() => {
-        console.log("mountTexture");
-    });
 </script>
 
 <div

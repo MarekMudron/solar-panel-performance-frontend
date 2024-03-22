@@ -2,10 +2,10 @@
     import {currentStage} from "../stores"
 </script>
 
-<div class="d-flex justify-content-start position-absolute w-100" style="background-color: white;">
-    <button class="btn btn-primary m-2" >Location</button>
+<div class="d-flex justify-content-start  w-100" style="background-color: white; height:60px">
+    <a href="/"><button class="btn btn-primary m-2" >Location</button></a>
 
-    <button class="btn btn-primary m-2" disabled={$currentStage < 1}>Site Modelling</button>
+    <a href="/design"><button class="btn btn-primary m-2" disabled={$currentStage < 1}>Site Modelling</button></a>
 
     <button class="btn btn-primary m-2" disabled={$currentStage < 2}>System Design</button>
 

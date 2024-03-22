@@ -6,6 +6,10 @@ export const currentLocation = writable({});
 
 export const panelArray = writable([])
 
+export const isTextureLoaded = writable(false)
+
+export const isThreeJsSetup = writable(false)
+
 export const currentStage = writable(0)
 
 

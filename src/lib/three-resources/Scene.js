@@ -1,10 +1,11 @@
-import { Scene, Color } from "three";
+import { Scene, Color, Fog } from "three";
 import { modelsTo3d, modelsTo2d } from "./Site";
 
 export let scene;
 
 export function setup() {
-    scene = new Scene({ background: new Color(0xf4f4f0) });
+    scene = new Scene({ background: new Color(0x000000) });
+    scene.fog = new Fog( 0x000000, 150, 400 );
 }
 
 export function update(renderer, camera) {

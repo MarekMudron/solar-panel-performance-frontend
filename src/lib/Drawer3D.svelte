@@ -11,7 +11,7 @@
     } from "$lib/three-resources/Interface.js";
     import { addPanel, panels } from "$lib/three-resources/Panels.js";
     import { callUndo, callRedo } from "$lib/three-resources/UndoRedo.js";
-    import { panelArray } from "../stores";
+    import {  isThreeJsSetup, panelArray } from "../stores";
     import { is2d } from "$lib/three-resources/Mode.js";
 
     let canv3d;
@@ -20,32 +20,28 @@
 
     export function activate() {
         setup(canv3d);
+        initMapPlane(texture, texture.width * pxToMeter);
     }
 
     onMount(() => {
-        activate();
+        //if(!$isThreeJsSetup) {
+            console.log("setting up three js");
+            activate();
+            isThreeJsSetup.set(true);
+        //}
     });
 
-    $: {
-        if (texture) {
-            initMapPlane(texture, texture.width * pxToMeter);
-        }
-    }
-
-    import { navigate } from "svelte-routing";
-    import { NoToneMapping } from "three";
-
-    function simulate() {
-        let serialized = panels.map((panel) => {
-            return {
-                azimuth: panel.euler.z,
-                tilt: panel.euler.x,
-                nameplate: 0.5,
-                gamma_pdc: 0.001,
-            };
-        });
-        panelArray.set(serialized);
-    }
+    // function simulate() {
+    //     let serialized = panels.map((panel) => {
+    //         return {
+    //             azimuth: panel.euler.z,
+    //             tilt: panel.euler.x,
+    //             nameplate: 0.5,
+    //             gamma_pdc: 0.001,
+    //         };
+    //     });
+    //     panelArray.set(serialized);
+    // }
 
     let visible2d, visible3d;
 
@@ -55,13 +51,13 @@
     }
 </script>
 
+
 <canvas
     id="canvas"
-    class="border"
-    style="height:100%; width:100%; z-index:20; display:block; background-color:#ffd4e7"
-    bind:this={canv3d}
+    style="height:calc(100vh - 60px);visibility:{$isThreeJsSetup ? "visible":"hidden"} width:100%; z-index:0; display:block; background-color:#ffaaff"
+    bind:this={canv3d} 
 ></canvas>
-
+<!-- 
 <div
     class="hstack position-absolute start-0 translate-middle-y"
     style="top:100px;"
@@ -126,5 +122,5 @@
         on:click={() => {
             simulate();
         }}>Simulate</a
-    > -->
-</div>
+    > 
+</div> -->

@@ -1,9 +1,10 @@
 import { Raycaster, Vector2, Mesh } from "three";
-import { camera } from "$lib/three-resources/Canvas.js"
+import { camera, canvas } from "$lib/three-resources/Canvas.js"
 import { mapPlane } from "$lib/three-resources/MapPlane.js"
 import { scene } from "./Scene";
 import { map } from "leaflet";
 import { blocks } from "./Site";
+
 
 
 let raycaster = new Raycaster();
@@ -12,8 +13,8 @@ raycaster.params.Points.threshold = 0.01;
 
 function getScreenPlanePosition() {
     return new Vector2(
-        (event.clientX / window.innerWidth) * 2 - 1,
-        - (event.clientY / window.innerHeight) * 2 + 1);
+        ( (event.clientX - canvas.offsetLeft) / canvas.clientWidth ) * 2 - 1,
+        ( (event.clientY - canvas.offsetTop) / canvas.clientHeight ) * -2 + 1);
 }
 
 export function getMapPlanePosition() {

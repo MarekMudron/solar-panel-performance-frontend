@@ -12,4 +12,9 @@ export const isThreeJsSetup = writable(false)
 
 export const currentStage = writable(0)
 
+export const scene_st = writable();
+export const camera_st = writable();
+export const renderer_st = writable();
+export const canvas__st = writable();
+export const mapPlane = writable();
 

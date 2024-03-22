@@ -25,12 +25,12 @@ export function setup(canvas_) {
         (window.devicePixelRatio)
             ? window.devicePixelRatio
             : 1);
-    renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
 
     camera = new PerspectiveCamera(
         45,
-        canvas.clientWidth / canvas.clientHeight,
+        window.innerWidth / window.innerHeight,
         1,
         1000);
     camera.position.set(0,0,100)
@@ -48,9 +48,9 @@ export function setup(canvas_) {
 
 
 function onWindowResize() {
-    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 

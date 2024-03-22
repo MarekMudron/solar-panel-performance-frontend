@@ -1,7 +1,6 @@
 <script>
     import { onMount } from "svelte";
-    import { setup } from "$lib/three-resources/Canvas.js";
-    import { initMapPlane } from "$lib/three-resources/MapPlane.js";
+    import ThreeCanvas from "./ThreeCanvas.svelte";
     import {
         drawSedlova,
         drawIhlanova,
@@ -14,22 +13,9 @@
     import {  isThreeJsSetup, panelArray } from "../stores";
     import { is2d } from "$lib/three-resources/Mode.js";
 
-    let canv3d;
     export let texture;
     export let pxToMeter;
 
-    export function activate() {
-        setup(canv3d);
-        initMapPlane(texture, texture.width * pxToMeter);
-    }
-
-    onMount(() => {
-        //if(!$isThreeJsSetup) {
-            console.log("setting up three js");
-            activate();
-            isThreeJsSetup.set(true);
-        //}
-    });
 
     // function simulate() {
     //     let serialized = panels.map((panel) => {
@@ -51,12 +37,14 @@
     }
 </script>
 
-
-<canvas
+{#if texture}
+<ThreeCanvas texture={texture}></ThreeCanvas>
+{/if}
+<!-- <canvas
     id="canvas"
     style="height:calc(100vh - 60px);visibility:{$isThreeJsSetup ? "visible":"hidden"} width:100%; z-index:0; display:block; background-color:#ffaaff"
     bind:this={canv3d} 
-></canvas>
+></canvas> -->
 <!-- 
 <div
     class="hstack position-absolute start-0 translate-middle-y"

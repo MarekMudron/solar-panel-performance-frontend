@@ -10,5 +10,6 @@ export function initMapPlane(img, dimMeters) {
     texture.colorSpace = SRGBColorSpace;
     mapPlane.material.map = texture
     mapPlane.material.depthTest = false;
+    mapPlane.renderOrder=-100
     add(mapPlane)
 }

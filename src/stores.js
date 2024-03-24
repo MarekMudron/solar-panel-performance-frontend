@@ -12,4 +12,6 @@ export const texture = writable()
 
 export const currentStage = writable(0)
 
+export const siteStorage = writable()
+
 

@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import { setup } from "$lib/three-resources/Canvas.js";
     import { initMapPlane } from "$lib/three-resources/MapPlane.js";
     import {
@@ -11,21 +11,32 @@
     } from "$lib/three-resources/Interface.js";
     import { addPanel, panels } from "$lib/three-resources/Panels.js";
     import { callUndo, callRedo } from "$lib/three-resources/UndoRedo.js";
-    import {  panelArray } from "../stores";
+    import {  panelArray, siteStorage } from "../stores";
     import { is2d } from "$lib/three-resources/Mode.js";
+    import {blocks, addBlock} from "$lib/three-resources/Site.js";
 
     let canv3d;
     export let texture;
     export let pxToMeter;
+    export let blocks
 
     export function activate() {
         setup(canv3d);
+        if($siteStorage != null) {
+            $siteStorage.forEach(element => {
+                addBlock(element)
+            });
+        }
         initMapPlane(texture, texture.width * pxToMeter);
     }
 
     onMount(() => {
         activate();
     });
+
+    onDestroy(() => {
+        siteStorage.set(blocks)
+    })
 
     // function simulate() {
     //     let serialized = panels.map((panel) => {

@@ -1,9 +1,10 @@
-import {add, remove} from "./Scene"
+import { add, remove } from "./Scene"
 export let blocks = []
 
 export function addBlock(block) {
 	blocks.push(block);
-add(block.modelGroup)
+	add(block.modelGroup)
+	console.log(blocks);
 }
 
 

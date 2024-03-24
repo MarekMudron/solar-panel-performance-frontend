@@ -1,30 +1,35 @@
 <script>
     import MapTextureLoader from "$lib/MapTextureLoader.svelte";
-    import Drawer2D from "$lib/Drawer2D.svelte";
-    import Drawer3D from "$lib/Drawer3D.svelte";
+    import MapCanvas from "$lib/MapCanvas.svelte";
     import { currentStage, texture, didLocationChange } from "../../stores";
     import { currentLocation } from "../../stores";
-    import { afterUpdate, beforeUpdate, onMount } from "svelte";
+    import { onMount } from "svelte";
+    import { callUndo, callRedo } from "$lib/three-resources/UndoRedo.js";
 
     let pxToMeter;
 
-    function textureLoaded(e) {
-        texture.set({ texture: e.detail, pxToMeter: pxToMeter });
-        
-    }
 
     onMount(() => {
-        didLocationChange.set(false)
+        didLocationChange.set(false);
         currentStage.set(1);
     });
 </script>
 
-{#if $texture == null || $didLocationChange}
-    <MapTextureLoader
-        on:onTextureLoaded={textureLoaded}
-        centerCoords={[$currentLocation.lat, $currentLocation.lon]}
-        bind:pxToMeter
-    ></MapTextureLoader>
-{:else}
-    <Drawer3D texture={$texture.texture} pxToMeter={$texture.pxToMeter} />
-{/if}
+<MapCanvas />
+<!-- 
+<div
+    class="hstack position-absolute start-0 translate-middle-y"
+    style="top:100px;"
+>
+    <button
+        type="button"
+        class="btn btn-secondary btn-block mb-2"
+        on:click={() => callUndo()}>Undo</button
+    >
+
+    <button
+        type="button"
+        class="btn btn-secondary btn-block mb-2"
+        on:click={() => callRedo()}>Redo</button
+    >
+</div> -->

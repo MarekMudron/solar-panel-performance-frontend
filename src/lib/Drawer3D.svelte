@@ -9,16 +9,14 @@
         drawValbova,
         toggleMode,
     } from "$lib/three-resources/Interface.js";
-    import { addPanel, panels } from "$lib/three-resources/Panels.js";
     import { callUndo, callRedo } from "$lib/three-resources/UndoRedo.js";
-    import {  panelArray, siteStorage } from "../stores";
+    import {  siteStorage } from "../stores";
     import { is2d } from "$lib/three-resources/Mode.js";
     import {blocks, addBlock} from "$lib/three-resources/Site.js";
 
     let canv3d;
     export let texture;
     export let pxToMeter;
-    export let blocks
 
     export function activate() {
         setup(canv3d);
@@ -37,18 +35,6 @@
     onDestroy(() => {
         siteStorage.set(blocks)
     })
-
-    // function simulate() {
-    //     let serialized = panels.map((panel) => {
-    //         return {
-    //             azimuth: panel.euler.z,
-    //             tilt: panel.euler.x,
-    //             nameplate: 0.5,
-    //             gamma_pdc: 0.001,
-    //         };
-    //     });
-    //     panelArray.set(serialized);
-    // }
 
     let visible2d, visible3d;
 
@@ -115,19 +101,3 @@
         on:click={() => drawPultova()}>Pultova strecha</button
     >
 </div>
-    <!-- <button
-        type="button"
-        class="btn btn-warning btn-block mb-2"
-        style="display:{visible3d}"
-        on:click={() => addPanel()}>Add Panel</button
-    > -->
-
-<!-- <a
-        type="button"
-        class="btn btn-success btn-block mb-2"
-        href="/simulation"
-        on:click={() => {
-            simulate();
-        }}>Simulate</a
-    > 
-</div>-->

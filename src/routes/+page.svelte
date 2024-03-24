@@ -2,7 +2,7 @@
     import AddressChooser from "$lib/AddressChooser.svelte";
     import LocationChooser from "$lib/LocationChooser.svelte";
     import Geolocation from "svelte-geolocation";
-    import { currentLocation, currentStage } from "../stores";
+    import { currentLocation, currentStage, didLocationChange } from "../stores";
     import { onMount } from "svelte";
 
     let address;
@@ -17,13 +17,13 @@
     }
 
     function locationChosen(e) {
-        console.log("Chosen location: ",e.detail);
         let loc = {
             lat:e.detail.lat,
             lon:e.detail.lon,
             alt:e.detail.alt,
         }
         currentLocation.set(loc);
+        didLocationChange.set(true)
     }
 
 

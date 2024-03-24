@@ -11,7 +11,7 @@
     } from "$lib/three-resources/Interface.js";
     import { addPanel, panels } from "$lib/three-resources/Panels.js";
     import { callUndo, callRedo } from "$lib/three-resources/UndoRedo.js";
-    import {  isThreeJsSetup, panelArray } from "../stores";
+    import {  panelArray } from "../stores";
     import { is2d } from "$lib/three-resources/Mode.js";
 
     let canv3d;
@@ -24,11 +24,7 @@
     }
 
     onMount(() => {
-        //if(!$isThreeJsSetup) {
-            console.log("setting up three js");
-            activate();
-            isThreeJsSetup.set(true);
-        //}
+        activate();
     });
 
     // function simulate() {
@@ -51,13 +47,12 @@
     }
 </script>
 
-
 <canvas
     id="canvas"
-    style="height:calc(100vh - 60px);visibility:{$isThreeJsSetup ? "visible":"hidden"} width:100%; z-index:0; display:block; background-color:#ffaaff"
-    bind:this={canv3d} 
+    style="height:calc(100vh - 60px);visibility:visible; width:100%; z-index:0; display:block; background-color:#000000"
+    bind:this={canv3d}
 ></canvas>
-<!-- 
+
 <div
     class="hstack position-absolute start-0 translate-middle-y"
     style="top:100px;"
@@ -108,6 +103,7 @@
         style="display:{visible2d}"
         on:click={() => drawPultova()}>Pultova strecha</button
     >
+</div>
     <!-- <button
         type="button"
         class="btn btn-warning btn-block mb-2"
@@ -115,7 +111,7 @@
         on:click={() => addPanel()}>Add Panel</button
     > -->
 
-    <!-- <a
+<!-- <a
         type="button"
         class="btn btn-success btn-block mb-2"
         href="/simulation"
@@ -123,4 +119,4 @@
             simulate();
         }}>Simulate</a
     > 
-</div> -->
+</div>-->

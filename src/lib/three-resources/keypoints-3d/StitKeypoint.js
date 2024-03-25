@@ -1,4 +1,4 @@
-import {SedlovaBlock, ValbovaBlock, PultovaBlock, IhlanovaBlock} from "../Blocks"
+import { SedlovaBlock, ValbovaBlock, PultovaBlock, IhlanovaBlock } from "../Blocks"
 import { BoxGeometry, Color, Mesh, MeshBasicMaterial, Sprite, SpriteMaterial, Vector3 } from "three";
 import { add, remove } from "../Scene";
 import { getPerpendilarPlane, getSphere } from "../polygonFactory";
@@ -6,7 +6,10 @@ import { addOp } from "../UndoRedo";
 import { getIntersectWithMesh } from "../Raycaster";
 import { camera } from "../Canvas";
 
-export class StitKeypoint {
+export var stitKeypoints = [];
+
+
+class StitKeypoint {
     constructor(block) {
         this.block = block;
         this.model = this.initModel();
@@ -36,7 +39,7 @@ export class StitKeypoint {
         this.block.addEventListener("valbChange", (requiredDepth) => {
             if (this.block instanceof ValbovaBlock) {
                 this.model.scale.setX(1 - (2 * requiredDepth / this.block.baseSize.x));
-            } 
+            }
         });
     }
 
@@ -126,3 +129,8 @@ export class StitKeypoint {
     }
 }
 
+export function createKeypointFor(block) {
+    let cp = new StitKeypoint(block);
+    stitKeypoints.push(cp)
+    return cp
+}

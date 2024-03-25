@@ -5,7 +5,10 @@ import { getIntersectWithMesh } from "../Raycaster";
 import { camera } from "../Canvas";
 import { Color } from "three";
 
-export class RoofKeypoint {
+export var roofKeypoints = [];
+
+
+class RoofKeypoint {
     constructor(block) {
         this.block = block;
         this.model = this.block.roofGroup.children[0];
@@ -39,4 +42,10 @@ export class RoofKeypoint {
             (state) => { state[0].setBaseHeight(state[2]) },
             [this.block, this.size.z, this.startBaseSize.z])
     }
+}
+
+export function createKeypointFor(block) {
+    let cp = new RoofKeypoint(block);
+    roofKeypoints.push(cp)
+    return cp
 }

@@ -1,17 +1,15 @@
 import { getClosestIntersect } from "../Raycaster.js"
 import { Group } from "three"
 import { canvas } from "../Canvas.js"
-import { StitKeypoint } from "./StitKeypoint.js";
-import { RoofKeypoint } from "./RoofKeypoint.js";
-
+import * as Stit from "./StitKeypoint.js";
+import * as Roof from "./RoofKeypoint.js";
+import { deactivate3dFeedback, activate3dFeedback } from "./Keypoints3dFeedback.js";
 
 var currentOperation;
-var stitKeypoints = [];
-var roofKeypoints = [];
 
 function startCommand() {
 
-    let [intersect, keypoint] = getClosestIntersect(stitKeypoints, keypoint => {
+    let [intersect, keypoint] = getClosestIntersect(Stit.stitKeypoints, keypoint => {
         return [keypoint.model];
     });
     if (intersect != null) {
@@ -19,9 +17,10 @@ function startCommand() {
         currentOperation.startCommand(intersect);
         canvas.addEventListener("pointermove", performCommand);
         canvas.addEventListener("pointerup", finishCommand);
+        deactivate3dFeedback()
         return;
     }
-    [intersect, keypoint] = getClosestIntersect(roofKeypoints, keypoint => {
+    [intersect, keypoint] = getClosestIntersect(Roof.roofKeypoints, keypoint => {
         return [keypoint.model];
     });
     if (intersect != null) {
@@ -29,54 +28,12 @@ function startCommand() {
         currentOperation.startCommand(intersect);
         canvas.addEventListener("pointermove", performCommand);
         canvas.addEventListener("pointerup", finishCommand);
+        deactivate3dFeedback()
+
         return;
     }
 }
 
-let hoveredStit;
-let hoveredRoof;
-
-function feedbackTop() {
-    if (hoveredStit != null) {
-        let [intersect, keypoint] = getClosestIntersect(stitKeypoints, keypoint => {
-            return [keypoint.model];
-        });
-        if (intersect == null) {
-            hoveredStit.material.color = hoveredStit.userData.color
-            hoveredStit = null;
-        }
-    } else {
-        let [intersect, keypoint] = getClosestIntersect(stitKeypoints, keypoint => {
-            return [keypoint.model];
-        });
-        if (intersect != null) {
-            hoveredStit = intersect.object;
-            intersect.object.material.color = intersect.object.userData.hoverColor;
-        }
-    }
-    return false;
-}
-
-function feedbackRoof() {
-    if (hoveredRoof != null) {
-        let [intersect, keypoint] = getClosestIntersect(roofKeypoints, keypoint => {
-            return [keypoint.model];
-        });
-        if (intersect == null) {
-            hoveredRoof.material.color = hoveredRoof.userData.color
-            hoveredRoof = null;
-        }
-    } else {
-        let [intersect, keypoint] = getClosestIntersect(roofKeypoints, keypoint => {
-            return [keypoint.model];
-        });
-        if (intersect != null) {
-            hoveredRoof = intersect.object;
-            intersect.object.material.color = intersect.object.userData.hoverColor;
-        }
-    }
-    return false;
-}
 
 function performCommand() {
     currentOperation.performCommand();
@@ -87,30 +44,25 @@ function finishCommand() {
     currentOperation = null;
     canvas.removeEventListener("pointermove", performCommand);
     canvas.removeEventListener("pointerup", finishCommand);
-}
-
-function feedback() {
-    feedbackTop()
-    if (hoveredStit == null)
-        feedbackRoof();
+    activate3dFeedback();
 }
 
 
 
 export function activate3dKeypoints() {
-    canvas.addEventListener("pointermove", feedback)
-    canvas.addEventListener("pointerdown", startCommand);
-    stitKeypoints.forEach(keypoint => {
+    activate3dFeedback()
+        canvas.addEventListener("pointerdown", startCommand);
+    Stit.stitKeypoints.forEach(keypoint => {
         keypoint.model.visible = true;
     })
 
 }
 
 export function deactivate3dKeypoints() {
-    canvas.removeEventListener("pointermove", feedback)
+    deactivate3dFeedback();
     canvas.removeEventListener("pointerdown", startCommand);
     canvas.removeEventListener("pointerup", finishCommand);
-    stitKeypoints.forEach(keypoint => {
+    Stit.stitKeypoints.forEach(keypoint => {
         keypoint.model.visible = false;
     })
 
@@ -118,12 +70,11 @@ export function deactivate3dKeypoints() {
 
 
 export function createRoofKeypoints(block) {
-    let stitKeypoint = new StitKeypoint(block);
-    let roofKeypoint = new RoofKeypoint(block);
-    stitKeypoints.push(stitKeypoint);
-    roofKeypoints.push(roofKeypoint)
+    let stitKeypoint = Stit.createKeypointFor(block)
+    let roofKeypoint = Roof.createKeypointFor(block)
+    Stit.stitKeypoints.push(stitKeypoint);
+    Roof.roofKeypoints.push(roofKeypoint)
     let model = new Group();
     model.add(stitKeypoint.model);
-
     return model;
 }

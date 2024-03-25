@@ -1,4 +1,4 @@
-import { getPlaneKeypointsIntersect } from "../Raycaster.js"
+import { getClosestIntersect } from "../Raycaster.js"
 import { Group } from "three"
 import { canvas } from "../Canvas.js"
 import { StitKeypoint } from "./StitKeypoint.js";
@@ -11,7 +11,7 @@ var roofKeypoints = [];
 
 function startCommand() {
 
-    let [intersect, keypoint] = getPlaneKeypointsIntersect(stitKeypoints, keypoint => {
+    let [intersect, keypoint] = getClosestIntersect(stitKeypoints, keypoint => {
         return [keypoint.model];
     });
     if (intersect != null) {
@@ -21,7 +21,7 @@ function startCommand() {
         canvas.addEventListener("pointerup", finishCommand);
         return;
     }
-    [intersect, keypoint] = getPlaneKeypointsIntersect(roofKeypoints, keypoint => {
+    [intersect, keypoint] = getClosestIntersect(roofKeypoints, keypoint => {
         return [keypoint.model];
     });
     if (intersect != null) {
@@ -38,7 +38,7 @@ let hoveredRoof;
 
 function feedbackTop() {
     if (hoveredStit != null) {
-        let [intersect, keypoint] = getPlaneKeypointsIntersect(stitKeypoints, keypoint => {
+        let [intersect, keypoint] = getClosestIntersect(stitKeypoints, keypoint => {
             return [keypoint.model];
         });
         if (intersect == null) {
@@ -46,7 +46,7 @@ function feedbackTop() {
             hoveredStit = null;
         }
     } else {
-        let [intersect, keypoint] = getPlaneKeypointsIntersect(stitKeypoints, keypoint => {
+        let [intersect, keypoint] = getClosestIntersect(stitKeypoints, keypoint => {
             return [keypoint.model];
         });
         if (intersect != null) {
@@ -59,7 +59,7 @@ function feedbackTop() {
 
 function feedbackRoof() {
     if (hoveredRoof != null) {
-        let [intersect, keypoint] = getPlaneKeypointsIntersect(roofKeypoints, keypoint => {
+        let [intersect, keypoint] = getClosestIntersect(roofKeypoints, keypoint => {
             return [keypoint.model];
         });
         if (intersect == null) {
@@ -67,7 +67,7 @@ function feedbackRoof() {
             hoveredRoof = null;
         }
     } else {
-        let [intersect, keypoint] = getPlaneKeypointsIntersect(roofKeypoints, keypoint => {
+        let [intersect, keypoint] = getClosestIntersect(roofKeypoints, keypoint => {
             return [keypoint.model];
         });
         if (intersect != null) {

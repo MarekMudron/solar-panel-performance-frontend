@@ -11,7 +11,6 @@ export class RoofKeypoint {
         this.model = this.block.roofGroup.children[0];
         this.model.userData.hoverColor = new Color(0x999999)
         this.model.userData.color = new Color(0x780000)
-        console.log(this.model);
     }
 
 

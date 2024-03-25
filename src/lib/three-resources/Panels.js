@@ -57,7 +57,6 @@ function startArea() {
 	let dirVec = new THREE.Vector3(Math.cos(this.block.azimuth), Math.sin(this.block.azimuth), 0);
 	let faceIndex = roofIP[0].faceIndex
 	let planeNormal = 
-	console.log(roofIP[0], roofIP[1]);
 
 }
 

@@ -34,8 +34,20 @@ export function getIntersectWithMesh(mesh) {
     }
 }
 
+export function getIntersectWithOneOf(keypoints, fnToGetModel) {
+    raycaster.setFromCamera(getScreenPlanePosition(), camera);
+    for (const keypoint of keypoints) {
+        let intersects = raycaster.intersectObjects(fnToGetModel(keypoint), true);
 
-export function getPlaneKeypointsIntersect(keypoints, fnToGetModel) {
+        if (intersects.length > 0) {
+            return [intersects[0], keypoint]
+            
+        }
+    }
+    return [null, null]
+}
+
+export function getClosestIntersect(keypoints, fnToGetModel) {
     raycaster.setFromCamera(getScreenPlanePosition(), camera);
     var closestIntersect= {intersect:null, keypoint :null};
 	var closestDistance;

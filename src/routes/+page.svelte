@@ -2,7 +2,7 @@
     import AddressChooser from "$lib/AddressChooser.svelte";
     import LocationChooser from "$lib/LocationChooser.svelte";
     import Geolocation from "svelte-geolocation";
-    import { currentLocation, currentStage, didLocationChange } from "../stores";
+    import { currentLocation, stageInProgress, didLocationChange } from "../stores";
     import { onMount } from "svelte";
 
     let address;
@@ -23,9 +23,10 @@
             alt:e.detail.alt,
         }
         currentLocation.set(loc);
-        didLocationChange.set(true)
     }
 
+    onMount(() => {
+    })
 
 </script>
 
@@ -48,6 +49,6 @@
                 on:chosen={locationChosen}
             ></LocationChooser>
         </div>
-        <a role="button" href="/design" class="btn btn-primary">Design</a>
+        <a role="button" href="/design" on:click={() => {stageInProgress.set(0);didLocationChange.set(true)}} class="btn btn-primary">Design</a>
     </div>
 </div>

@@ -3,8 +3,10 @@ import { getMapPlanePosition } from "../Raycaster";
 import { addOp } from "../UndoRedo";
 import { getSphere } from "../polygonFactory";
 
+export var cornerKeypoints = [];
 
-export class CornerKeypoints {
+
+class CornerKeypoints {
     constructor(block) {
         this.block = block;
         this.model = this.initModel();
@@ -65,4 +67,10 @@ export class CornerKeypoints {
             [this.block, this.posunOdZaciatku, this.startAzimuth])
     }
 
+}
+
+export function createKeypointFor(block) {
+    let cp = new CornerKeypoints(block);
+    cornerKeypoints.push(cp)
+    return cp
 }

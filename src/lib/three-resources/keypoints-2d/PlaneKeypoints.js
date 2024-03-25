@@ -2,8 +2,9 @@ import { PlaneGeometry,MeshBasicMaterial, Mesh, DoubleSide } from "three";
 import { getMapPlanePosition } from "../Raycaster";
 import { addOp } from "../UndoRedo";
 
+export var planeKeypoints = [];
 
-export class PlaneKeypoint {
+class PlaneKeypoint {
     constructor(block) {
         this.block = block;
         this.model = this.initModel();
@@ -42,4 +43,11 @@ export class PlaneKeypoint {
             (state) => { state[0].moveHorizontally(state[2])},
             [this.block, this.finalPos, this.startHousePos,])
     }
+}
+
+
+export function createKeypointFor(block) {
+    let cp = new PlaneKeypoint(block);
+    planeKeypoints.push(cp)
+    return cp
 }

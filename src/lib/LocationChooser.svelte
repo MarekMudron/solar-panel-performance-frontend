@@ -105,7 +105,9 @@
 
     function initializeMap() {
         extendCenterMarker();
-        map = L.map("map-element");
+        map = L.map("map-element", {
+            debounceMoveend: false
+        });
 
         mainLayer = L.tileLayer(
             `https://api.mapy.cz/v1/maptiles/aerial/256/{z}/{x}/{y}?apikey=${$API_KEY}`,
@@ -132,7 +134,7 @@
 
         map.setView(inputCoords, 17);
         currentMarker = L.centerMarker(map);
-        map.on("moveend", function (e) {
+        map.on("dragend", function (e) {
             let c = map.getCenter();
             currentCoords = { lat: c.lat, lon: c.lng };
             setCursorPosition();

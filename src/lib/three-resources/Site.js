@@ -4,7 +4,6 @@ export let blocks = []
 export function addBlock(block) {
 	blocks.push(block);
 	add(block.modelGroup)
-	console.log(blocks);
 }
 
 

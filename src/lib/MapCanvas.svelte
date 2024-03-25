@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import { setup } from "$lib/three-resources/Canvas.js";
     import MapTextureLoader from "$lib/MapTextureLoader.svelte";
-
+    import {initMapPlane} from "$lib/three-resources/MapPlane.js";
     import { texture, didLocationChange,currentLocation } from "../stores";
 
     let canv3d;
@@ -12,20 +12,21 @@
         texture.set({ texture: e.detail, pxToMeter: pxToMeter });
         shouldLoadTexture = false;
         isTextureLoaded = true;
+        didLocationChange.set(false)
         initThree();
     }
 
     function initThree() {
-        console.log(canv3d);
         setup(canv3d);
-        initMapPlane($texture, $texture.width * pxToMeter);
+        initMapPlane($texture.texture, $texture.texture.width * $texture.pxToMeter);
     }
 
     let shouldLoadTexture = false;
     let isTextureLoaded = false;
 
     onMount(() => {
-        shouldLoadTexture = $texture == null || $didLocationChange;
+        shouldLoadTexture = $didLocationChange;
+        if(!shouldLoadTexture) initThree()
     });
 </script>
 

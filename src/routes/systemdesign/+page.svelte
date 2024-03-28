@@ -44,6 +44,9 @@
     function addPanelTemplate(e) {
         panelTemplates.update((templates) => ([...templates, e.detail]));
     }
+
+    panelTemplates.update((templates) => ([...templates, { name:"template", height:1, width:0.5, pp:10,pmpp:10 }]));
+
 </script>
 
 <MapCanvas />

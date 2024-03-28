@@ -152,7 +152,7 @@ class RoofBlock {
         });
     }
 
-    
+
 
 
 }
@@ -190,20 +190,20 @@ export class SedlovaBlock extends RoofBlock {
     }
 
     alignPanel(panel, intersectFaceIndex) {
-		if(![0,1,2,3].includes(intersectFaceIndex)) {
-			return false;
-		}
-		var euler;
-		if([0,1].includes(intersectFaceIndex)) {
-			euler = new THREE.Euler(MathUtils.degToRad(getAngleDeg(this.heightRoof, this.baseSize.y/2)),0,0, "ZXY");
-		}else if([2,3].includes(intersectFaceIndex)) {
-			euler = new THREE.Euler(MathUtils.degToRad(-getAngleDeg(this.heightRoof, this.baseSize.y/2)),0,0, "ZXY");
-		}
-		euler.z = this.azimuth;
-		panel.euler = euler;
-		panel.model.setRotationFromEuler(euler);
+        if (![0, 1, 2, 3].includes(intersectFaceIndex)) {
+            return false;
+        }
+        var euler;
+        if ([0, 1].includes(intersectFaceIndex)) {
+            euler = new THREE.Euler(MathUtils.degToRad(getAngleDeg(this.heightRoof, this.baseSize.y / 2)), 0, 0, "ZXY");
+        } else if ([2, 3].includes(intersectFaceIndex)) {
+            euler = new THREE.Euler(MathUtils.degToRad(-getAngleDeg(this.heightRoof, this.baseSize.y / 2)), 0, 0, "ZXY");
+        }
+        euler.z = this.azimuth;
+        panel.euler = euler;
+        panel.model.setRotationFromEuler(euler);
         return true;
-	}
+    }
 }
 
 
@@ -234,7 +234,24 @@ export class IhlanovaBlock extends RoofBlock {
         return g;
     }
 
-
+    alignPanel(panel, intersectFaceIndex) {
+        if (![0, 1, 2, 3].includes(intersectFaceIndex)) {
+            return false;
+        }
+        var euler;
+        if (intersectFaceIndex == 3) {
+            euler = new THREE.Euler(MathUtils.degToRad(getAngleDeg(this.heightRoof, this.baseSize.y / 2)), 0, this.azimuth, "ZXY");
+        } else if (intersectFaceIndex == 1) {
+            euler = new THREE.Euler(MathUtils.degToRad(-getAngleDeg(this.heightRoof, this.baseSize.y / 2)), 0, this.azimuth, "ZXY");
+        } else if (intersectFaceIndex == 2) {
+            euler = new THREE.Euler(MathUtils.degToRad(getAngleDeg(this.heightRoof, this.baseSize.x / 2)), 0, this.azimuth + Math.PI/2, "ZXY");
+        }else if (intersectFaceIndex == 0) {
+            euler = new THREE.Euler(MathUtils.degToRad(-getAngleDeg(this.heightRoof, this.baseSize.x / 2)),0, this.azimuth + Math.PI/2,"ZXY");
+        }
+        panel.euler = euler;
+        panel.model.setRotationFromEuler(euler);
+        return true;
+    }
 }
 
 
@@ -244,7 +261,7 @@ export class ValbovaBlock extends RoofBlock {
         this.depthValb = depthValb
         this.roofGroup = this.initRoof();	// Group consisting of wireframe and filling
         this.modelGroup.add(this.roofGroup);
-        
+
         this.setDepthValb(depthValb);
         this.rotateTo(azimuth)
         this.roofKeyPointsGroup = createRoofKeypoints(this);
@@ -272,9 +289,11 @@ export class ValbovaBlock extends RoofBlock {
         g.userData.mainColor = roofColor;
         g.position.setZ(this.baseSize.z);
         g.scale.set(this.baseSize.x, this.baseSize.y, this.heightRoof);
-        
+
         return g;
     }
+
+
 }
 
 export class PultovaBlock extends RoofBlock {

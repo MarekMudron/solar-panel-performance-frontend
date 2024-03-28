@@ -152,7 +152,7 @@ class RoofBlock {
         });
     }
 
-
+    
 
 
 }
@@ -204,6 +204,10 @@ export class SedlovaBlock extends RoofBlock {
         panel.model.setRotationFromEuler(euler);
         return true;
     }
+
+    isSide(faceIndex) {
+        return false;
+    }
 }
 
 
@@ -251,6 +255,10 @@ export class IhlanovaBlock extends RoofBlock {
         panel.euler = euler;
         panel.model.setRotationFromEuler(euler);
         return true;
+    }
+
+    isSide(faceIndex) {
+        return faceIndex == 2 || faceIndex == 0;
     }
 }
 

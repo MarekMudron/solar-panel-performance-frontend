@@ -19,7 +19,11 @@ function fromLocalToWorld(block, coords) {
 }
 
 function getLenW(diffFec) {
-    return Math.sqrt(diffFec.y*diffFec.y + diffFec.z*diffFec.z)
+    return Math.sqrt(diffFec.y * diffFec.y + diffFec.z * diffFec.z)
+}
+
+function getLenW2(diffFec) {
+    return Math.sqrt(diffFec.x * diffFec.x + diffFec.z * diffFec.z)
 }
 
 function getLastPos(startPoint, endPoint, y) {
@@ -33,6 +37,48 @@ function getLastPos(startPoint, endPoint, y) {
     lastPos.lerpVectors(startPoint, endPoint, coef);
     return lastPos;
 }
+
+
+function getLastPos2(startPoint, endPoint, x) {
+    let diffVec = startPoint.clone().sub(endPoint);
+    let numx = x
+    let num = (numx * currentPanel.size.y)
+    let denom = getLenW2(diffVec);
+    let coef = num / denom;
+    let lastPos = new Vector3();
+
+    lastPos.lerpVectors(startPoint, endPoint, coef);
+    return lastPos;
+}
+
+function getPanels2(block, faceIndex, startPoint, endPoint) {
+    const panels = [];
+    let diffVec = startPoint.clone().sub(endPoint);
+    let numCols = Math.floor(Math.abs(diffVec.x / currentPanel.size.y)) + 1
+    let numRows = Math.floor(Math.abs(getLenW(diffVec) / currentPanel.size.x)) + 1
+    let currentPos = startPoint.clone()
+
+    for (let j = 0; j < numRows; j++) {
+        for (let i = 0; i < numCols; i++) {
+            let cp = currentPos.clone()
+            if (startPoint.y < endPoint.y)
+                cp.y += j * (currentPanel.size.x);
+            else
+                cp.y -= j * (currentPanel.size.x);
+            let lastPos = getLastPos2(startPoint, endPoint, i)
+            cp.x = lastPos.x
+            cp.z = lastPos.z
+            let pos = fromLocalToWorld(block, cp)
+            let panel = currentPanel.clone();
+            panel.setPositionTo(pos)
+            block.alignPanel(panel, faceIndex)
+            panels.push(panel)
+        }
+    }
+    return panels;
+}
+
+
 
 function getPanels(block, faceIndex, startPoint, endPoint) {
     const panels = [];
@@ -62,6 +108,7 @@ function getPanels(block, faceIndex, startPoint, endPoint) {
 }
 
 
+
 function fromWorldToLocal(block, coords) {
     let scaleVec = block.roofGroup.scale;
     let scaleMatrix = new Matrix4().makeScale(scaleVec.x, scaleVec.y, scaleVec.z)
@@ -82,13 +129,21 @@ function drawPanels() {
             panels.forEach(panel => {
                 remove(panel.model)
             });
-            panels = getPanels(block, intersect.faceIndex, startPoint, endPoint);
+            if(block.isSide(intersect.faceIndex)) {
+                panels = getPanels2(block, intersect.faceIndex, startPoint, endPoint);
+
+            }else{
+                panels = getPanels(block, intersect.faceIndex, startPoint, endPoint);
+
+            }
             panels.forEach(panel => {
                 add(panel.model)
             });
 
         }
-
+    }else{
+        //finish
+        removeEventListener("pointermove", drawPanels);
     }
 }
 
@@ -96,7 +151,6 @@ function startArea() {
     let [intersect, block] = getIntersectWithRoofs()
 
     if (intersect != null) {
-        console.log(intersect);
         if (block.alignPanel(currentPanel, intersect.faceIndex)) {
             startPoint = fromWorldToLocal(block, intersect.point.clone())
             addEventListener("pointermove", drawPanels);

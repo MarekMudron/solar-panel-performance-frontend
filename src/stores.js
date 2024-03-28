@@ -15,7 +15,7 @@ export const currentStage = writable(0)
 
 export const siteStorage = writable()
 
-export const panelArray = writable([])
+export const panelsStorage = writable([])
 
 export const keypoints2dStorage = writable();
 export const keypoints3dStorage = writable();

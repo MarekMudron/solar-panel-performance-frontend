@@ -22,6 +22,7 @@
             lon:e.detail.lon,
             alt:e.detail.alt,
         }
+        console.log("LOCATION:",loc);
         currentLocation.set(loc);
     }
 

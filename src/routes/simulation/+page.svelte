@@ -39,3 +39,4 @@
     ></DailyAverageProductionChart>
   {/each}
 {/if}
+

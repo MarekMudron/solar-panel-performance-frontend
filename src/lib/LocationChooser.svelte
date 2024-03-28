@@ -135,8 +135,6 @@
         map.setView(inputCoords, 17);
         currentMarker = L.centerMarker(map);
         map.on("dragend", function (e) {
-            let c = map.getCenter();
-            currentCoords = { lat: c.lat, lon: c.lng };
             setCursorPosition();
         });
     }
@@ -157,12 +155,15 @@
     }
 
     async function setCursorPosition() {
+        let c = map.getCenter();
+        currentCoords = { lat: c.lat, lon: c.lng };
         currentCoords.alt = await getAltitude(currentCoords.lon, currentCoords.lat);
         dispatch("chosen", currentCoords);
     }
 
     function changeInputPos() {
         map.setView(inputCoords, 17);
+        setCursorPosition();
     }
 
     $: {

@@ -1,7 +1,6 @@
 import { Matrix4, Vector3 } from "three";
-import { currentPanel } from "./Panels";
+import { currentPanel, addPanelBlock } from "./Panels";
 import { getIntersectWithRoofs } from "./Raycaster";
-import { getSphere } from "./polygonFactory";
 import { add, remove } from "./Scene";
 
 
@@ -46,7 +45,6 @@ function getLastPos2(startPoint, endPoint, x) {
     let denom = getLenW2(diffVec);
     let coef = num / denom;
     let lastPos = new Vector3();
-
     lastPos.lerpVectors(startPoint, endPoint, coef);
     return lastPos;
 }
@@ -142,8 +140,8 @@ function drawPanels() {
 
         }
     }else{
-        //finish
-        removeEventListener("pointermove", drawPanels);
+        //finishArea
+        finishArea();
     }
 }
 
@@ -160,16 +158,14 @@ function startArea() {
 }
 
 function finishArea() {
-    let [intersect, block] = getIntersectWithRoofs()
-
-    if (intersect != null) {
-        if (block.alignPanel(currentPanel, intersect.faceIndex)) {
-            endPoint = block.roofGroup.worldToLocal(intersect.point.clone())
-            removeEventListener("pointermove", drawPanels);
-        }
-
+    if(panels.length != 0) {
+        addPanelBlock(panels);
+        panels = [];
     }
+    removeEventListener("pointermove", drawPanels);
 }
+
+export let onPanelBlockAdded;
 
 export function activatePanelAdder() {
     addEventListener("pointerdown", startArea);

@@ -5,8 +5,10 @@
 
     export let centerCoords = [-1, -1];
     const DIM = 2000;
-    import {createEventDispatcher} from 'svelte';
+    import { createEventDispatcher } from "svelte";
     const dispatch = createEventDispatcher();
+
+
     function initializeMap() {
         let map = L.map("map-element");
 
@@ -23,7 +25,6 @@
             },
         );
         mainLayer.addTo(map);
-
         map.setView(centerCoords, 19);
         map.dragging.disable();
         map.touchZoom.disable();
@@ -34,12 +35,11 @@
         if (map.tap) map.tap.disable();
         document.getElementById("map-element").style.cursor = "default";
         screenshot(map);
-        
     }
 
     import leafletImage from "leaflet-image";
 
- let texture;
+    let texture;
 
     function get1pxToMeters(map) {
         var centerLatLng = map.getCenter(); // get map center
@@ -51,7 +51,7 @@
         var latLngX = map.containerPointToLatLng(pointX);
 
         var distance = latLngC.distanceTo(latLngX);
-        return distance
+        return distance;
     }
 
     export let pxToMeter;
@@ -60,7 +60,7 @@
         let mapImg;
         leafletImage(map, function (err, canvas) {
             var img = document.createElement("img");
-            pxToMeter = get1pxToMeters(map)
+            pxToMeter = get1pxToMeters(map);
             img.width = 3000; //{DIM};
             img.height = 3000; //{DIM};
             img.src = canvas.toDataURL();
@@ -69,7 +69,6 @@
             //document.getElementById("map-element").remove();
         });
     }
-
 </script>
 
 <div
@@ -77,4 +76,3 @@
     id="map-element"
     use:initializeMap
 ></div>
-

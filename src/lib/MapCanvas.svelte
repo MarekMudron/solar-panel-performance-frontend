@@ -26,6 +26,7 @@
 
     onMount(() => {
         shouldLoadTexture = $didLocationChange;
+        console.log("BRO", shouldLoadTexture, $currentLocation);
         if(!shouldLoadTexture) initThree()
     });
 </script>

@@ -27,8 +27,17 @@ function getPerpendilarPlane(center) {
 function getPanelGeometry(size) {
 	var geometry = new THREE.PlaneGeometry(size.x, size.y);
 	var material = new THREE.MeshBasicMaterial(
+		{ color: 0x000000, visible: true, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: 0.1 });
+	var plane = new THREE.Mesh(geometry, material);
+	return plane;
+}
+
+export function getPanelOutlineGeometry(size) {
+	var geometry = new THREE.PlaneGeometry(size.x-0.1, size.y-0.1);
+	var material = new THREE.MeshBasicMaterial(
 		{ color: 0x5fdeef, visible: true, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: 0.1 });
 	var plane = new THREE.Mesh(geometry, material);
+	plane.position.z = 0.001
 	return plane;
 }
 

@@ -19,3 +19,4 @@ export const panelArray = writable([])
 
 export const keypoints2dStorage = writable();
 export const keypoints3dStorage = writable();
+export const panelTemplates = writable([]);

@@ -120,6 +120,7 @@ class RoofBlock {
 
     rotateTo(requiredAzimuth) {
         this.azimuth = requiredAzimuth;
+        //this.modelGroup.rotation.set(0,0,requiredAzimuth);
         this.modelGroup.children.forEach((elem) => {
             elem.rotation.set(0, 0, requiredAzimuth);
         });
@@ -150,6 +151,8 @@ class RoofBlock {
             }
         });
     }
+
+    
 
 
 }

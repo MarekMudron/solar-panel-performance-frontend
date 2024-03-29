@@ -1,7 +1,9 @@
 import { Matrix4, Vector3 } from "three";
-import { currentPanel, addPanelBlock } from "./Panels";
-import { getIntersectWithRoofs } from "./Raycaster";
-import { add, remove } from "./Scene";
+import {  addPanelBlock } from "./Strings";
+import {  currentPanel } from "./Panels.js";
+import { getIntersectWithRoofs } from "../Raycaster";
+import { add, remove } from "../Scene";
+import { deactivateDeleter } from "./PanelDeleter.js";
 
 
 let startPoint;
@@ -168,6 +170,12 @@ function finishArea() {
 export let onPanelBlockAdded;
 
 export function activatePanelAdder() {
+    deactivateDeleter();
     addEventListener("pointerdown", startArea);
     addEventListener("pointerup", finishArea)
+}
+
+export function deactivatePanelAdder() {
+    removeEventListener("pointerdown", startArea);
+    removeEventListener("pointerup", finishArea)
 }

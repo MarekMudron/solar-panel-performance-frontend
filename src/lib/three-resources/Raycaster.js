@@ -91,3 +91,7 @@ export function getIntersectWithRoofs() {
     }
     return [closestIntersect.intersect, closestIntersect.block]
 }
+
+export function calibrateRaycaster() {
+    raycaster.setFromCamera(getScreenPlanePosition(), camera);
+}

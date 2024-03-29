@@ -1,5 +1,5 @@
 import { currentPanel } from "./Panels";
-import { getIntersectWithRoofs, getMapPlanePosition } from "./Raycaster";
+import { getIntersectWithRoofs, getMapPlanePosition } from "../Raycaster";
 
 function performFeedback() {
     let [intersect, block] = getIntersectWithRoofs()
@@ -8,7 +8,7 @@ function performFeedback() {
         if (block.alignPanel(currentPanel, intersect.faceIndex)) {
             currentPanel.model.visible = true;
             currentPanel.setPositionTo(intersect.point)
-        }else{
+        } else {
             currentPanel.model.visible = false;
         }
     } else {
@@ -18,4 +18,10 @@ function performFeedback() {
 
 export function activatePanelFeedback() {
     addEventListener("pointermove", performFeedback);
+}
+
+export function deactivatePanelFeedback() {
+    if (currentPanel)
+        currentPanel.model.visible = false;
+    removeEventListener("pointermove", performFeedback);
 }

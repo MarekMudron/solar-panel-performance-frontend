@@ -1,8 +1,9 @@
 import * as THREE from "three"
-import { getPanelGeometry,getPanelOutlineGeometry } from "./polygonFactory";
-import { add } from "./Scene";
+import { getPanelGeometry,getPanelOutlineGeometry } from "../polygonFactory";
+import { add , remove} from "../Scene";
 import { activatePanelAdder } from "./PanelAdder";
 import { activatePanelFeedback } from "./PanelAdderFeedback";
+import { deactivateDeleter } from "./PanelDeleter";
 
 export let currentPanel = null;
 
@@ -18,6 +19,8 @@ class Panel {
 		this.power = template.pp;
 		this.tempCoef = template.pmpp;
 		this.orientation = Orientation.Vertical;
+		this.mainColor = new THREE.Color(0x5fdeef)
+		this.hoverColor = new THREE.Color(0x03fc4e)
 	}
 
 	initModel() {
@@ -27,8 +30,6 @@ class Panel {
 		const wireframe = getPanelOutlineGeometry(this.size);
 		g.add(wireframe);
 		g.userData.isPanel = true;
-		g.userData.hoverColor = 0x13b3f2;
-		g.userData.mainColor = 0x5fdeef;
 		g.position.set(this.position.x, this.position.y, this.position.z)
 		return g;
 	}
@@ -42,6 +43,18 @@ class Panel {
 		return new Panel(this.template)
 	}
 
+	setHighlighted(toHighlight) {
+		if(toHighlight) {
+			this.model.children[1].material.color = this.hoverColor;
+		}else{
+			this.model.children[1].material.color = this.mainColor;
+		}
+	}
+
+	destroy() {
+		remove(this.model)
+	}
+
 
 }
 
@@ -49,18 +62,9 @@ export function setActiveTemplate(template) {
 	currentPanel = new Panel(template);
 	add(currentPanel.model)
 	activatePanelFeedback();
+	deactivateDeleter();
 	activatePanelAdder();
 }
 
 export let panelBlocks = []
 export let callbackOnAdded;
-
-export function setOnPanelsAdded(fn) {
-	callbackOnAdded = fn;
-}
-
-export function addPanelBlock(panels) {
-	panelBlocks.push(panels);
-	callbackOnAdded(panels);
-	console.log(panelBlocks);
-}

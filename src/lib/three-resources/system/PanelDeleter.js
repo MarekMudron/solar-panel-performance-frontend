@@ -10,6 +10,7 @@ function deleteUnderCursor() {
                     panel.destroy()
                     const index = string.panels.indexOf(panel);
                     string.panels.splice(index, 1);
+                    string.panels = string.panels;
                 }
             });
         });

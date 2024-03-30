@@ -1,4 +1,4 @@
-import {stringsStorage} from "../../../stores"
+import { stringsStorage } from "../../../stores"
 import { deactivateDeleter } from "./PanelDeleter";
 
 let activeString;
@@ -26,7 +26,7 @@ class String {
 }
 
 export function createNew() {
-    if(activeString) {
+    if (activeString) {
         activeString.setActive(false)
     }
     let ns = new String();
@@ -41,16 +41,28 @@ export function setActiveString(string) {
     activeString.setActive(false)
     activeString = string;
     activeString.setActive(true)
-    stringsStorage.set( strings)
+    stringsStorage.set(strings)
     deactivateDeleter();
 }
 
 export function addPanelBlock(panels) {
-	activeString.addPanels(panels);
+    activeString.addPanels(panels);
     stringsStorage.set(strings)
 }
 
 export function deactivateStrings() {
     activeString.setActive(false)
-    stringsStorage.set( strings)
+    stringsStorage.set(strings)
+}
+
+export function deleteString(string) {
+    stringsStorage.update(strings => {
+        const index = strings.indexOf(string);
+        strings.splice(index, 1);
+        return strings;
+    })
+}
+
+export function hasAnyActiveString() {
+    return activeString != null;
 }

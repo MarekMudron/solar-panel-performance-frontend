@@ -9,7 +9,7 @@
 
     <a href="/systemdesign"><button class="btn btn-primary m-2" disabled={$stageInProgress <= 1}>System Design</button></a>
 
-    <button class="btn btn-primary m-2" disabled={$currentStage < 3}>Performance</button>
+    <!-- <button class="btn btn-primary m-2" disabled={$currentStage < 3}>Performance</button>
 
-    <button class="btn btn-primary m-2 " disabled={$currentStage < 4}>Report</button>
+    <button class="btn btn-primary m-2 " disabled={$currentStage < 4}>Report</button> -->
 </div>

@@ -35,7 +35,7 @@ function getPanelGeometry(size) {
 export function getPanelOutlineGeometry(size) {
 	var geometry = new THREE.PlaneGeometry(size.x-0.1, size.y-0.1);
 	var material = new THREE.MeshBasicMaterial(
-		{ color: 0x5fdeef, visible: true, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: 0.1 });
+		{ color: 0x5fdeef, visible: true, transparent:true , polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: 0.1 });
 	var plane = new THREE.Mesh(geometry, material);
 	plane.position.z = 0.001
 	return plane;
@@ -43,7 +43,7 @@ export function getPanelOutlineGeometry(size) {
 
 function getSphere(center, color) {
 	const geometry = new THREE.SphereGeometry(1, 32, 16);
-	const material = new THREE.MeshBasicMaterial();
+	const material = new THREE.MeshBasicMaterial({transparent:true });
 	const sphere = new THREE.Mesh(geometry, material);
 	// const material = new THREE.SpriteMaterial( {color: color});
 	// const sprite = new THREE.Sprite( material );
@@ -83,7 +83,7 @@ function getCuboid() {
 	}
 
 	geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
-	const material = new THREE.MeshBasicMaterial({ vertexColors: true });
+	const material = new THREE.MeshBasicMaterial({ vertexColors: true,transparent:true  });
 	const cube = new THREE.Mesh(geometry, material);
 	//cube.scale.set(size.x, size.y, size.z);
 	//cube.position.set(0,0,size.z/2);
@@ -112,7 +112,7 @@ function getSedlo() {
 	const geometry = new THREE.BufferGeometry();
 	geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
 	geometry.setIndex(new THREE.BufferAttribute(indices, 1));
-	const material = new THREE.MeshBasicMaterial({ color: roofColor });
+	const material = new THREE.MeshBasicMaterial({ color: roofColor,transparent:true  });
 	const sedlo = new THREE.Mesh(geometry, material);
 	return sedlo;
 }
@@ -139,7 +139,7 @@ function getValb() {
 	const geometry = new THREE.BufferGeometry();
 	geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
 	geometry.setIndex(new THREE.BufferAttribute(indices, 1));
-	const material = new THREE.MeshBasicMaterial({ color: roofColor });
+	const material = new THREE.MeshBasicMaterial({ color: roofColor,transparent:true  });
 	const valb = new THREE.Mesh(geometry, material);
 	valb.name = "Valb";
 	return valb;
@@ -166,7 +166,7 @@ function getPyramid() {
 	geometry.setIndex(new THREE.BufferAttribute(indices, 1));
 
 	// Create material
-	const material = new THREE.MeshBasicMaterial({ color: roofColor });
+	const material = new THREE.MeshBasicMaterial({ color: roofColor,transparent:true  });
 
 	// Create pyramid mesh
 	const pyramid = new THREE.Mesh(geometry, material);

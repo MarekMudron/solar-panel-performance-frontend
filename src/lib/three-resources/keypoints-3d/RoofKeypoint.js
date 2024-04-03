@@ -49,3 +49,7 @@ export function createKeypointFor(block) {
     roofKeypoints.push(cp)
     return cp
 }
+
+export function removeRoofKPFor(block) {
+    roofKeypoints = roofKeypoints.filter(element => element.block !== block);
+}

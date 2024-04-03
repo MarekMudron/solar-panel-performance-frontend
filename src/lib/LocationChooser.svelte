@@ -173,7 +173,7 @@
 </script>
 
 <div
-    style="height:600px; width:600px;"
+    style="height:600px; width:1000px;"
     id="map-element"
     use:initializeMap
 ><h1>Map</h1></div>

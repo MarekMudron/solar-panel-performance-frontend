@@ -38,6 +38,18 @@ function changeValb(valbModel, pos) {
     wireframeposAttr.needsUpdate = true;
 }
 
+function setOpacity(obj, opacity) {
+    if (obj instanceof THREE.Mesh) {
+        obj.material.opacity = opacity
+        obj.material.transparent = true;
+        obj.needsUpdate = true;
+    } else if (obj instanceof THREE.Group) {
+        obj.traverse(child => {
+            if (child !== obj)
+                setOpacity(child, opacity)
+        })
+    }
+}
 
 class RoofBlock {
 
@@ -57,7 +69,36 @@ class RoofBlock {
         this.modelGroup.add(this.keyPointsGroup);
         this.as2d()
         this.moveHorizontally(pos2d);
+    }
 
+    fade() {
+        // base completely opaque
+        this.baseGroup.visible = false;
+        setOpacity(this.roofGroup, 0.5)
+        this.keyPointsGroup.visible = false
+        // roof partially opaque
+        // this.roofGroup.traverse(mesh => {
+        //     if (mesh instanceof THREE.Mesh) {
+        //         mesh.material.opacity = 0.5
+        //         mesh.needsUpdate = true;
+        //     }
+        //     else if (mesh instanceof THREE.Group) {
+        //         this.roofGroup.traverse(mesh => {
+        //             if (mesh instanceof THREE.Mesh) {
+        //                 mesh.material.opacity = 0.5
+        //                 mesh.needsUpdate = true;
+        //             }
+
+        //         })
+        //     }
+        // })
+        // keypoints partially opaque
+    }
+
+    unfade() {
+        this.baseGroup.visible = true;
+        setOpacity(this.roofGroup, 1)
+        this.keyPointsGroup.visible = true
     }
 
     addEventListener(event, callback) {
@@ -81,7 +122,7 @@ class RoofBlock {
         const baseFilling = polygonFactory.getCuboid(this.baseSize);
         g.add(baseFilling);
         var wgeo = new THREE.EdgesGeometry(baseFilling.geometry);
-        var wmat = new THREE.LineBasicMaterial({ color: 0x000000 });
+        var wmat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true });
         var wireframe = new THREE.LineSegments(wgeo, wmat);
         g.add(wireframe);
         g.userData.isBase = true;
@@ -152,7 +193,7 @@ class RoofBlock {
         });
     }
 
-    
+
 
 
 }
@@ -176,7 +217,7 @@ export class SedlovaBlock extends RoofBlock {
         const roofFilling = polygonFactory.getSedlo();
         g.add(roofFilling);
         var wgeo = new THREE.EdgesGeometry(roofFilling.geometry);
-        var wmat = new THREE.LineBasicMaterial({ color: 0x000000 });
+        var wmat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true });
         var wireframe = new THREE.LineSegments(wgeo, wmat);
         g.add(wireframe);
         g.userData.isRoof = true;
@@ -248,9 +289,9 @@ export class IhlanovaBlock extends RoofBlock {
         } else if (intersectFaceIndex == 1) {
             euler = new THREE.Euler(MathUtils.degToRad(-getAngleDeg(this.heightRoof, this.baseSize.y / 2)), 0, this.azimuth, "ZXY");
         } else if (intersectFaceIndex == 2) {
-            euler = new THREE.Euler(MathUtils.degToRad(getAngleDeg(this.heightRoof, this.baseSize.x / 2)), 0, this.azimuth + Math.PI/2, "ZXY");
-        }else if (intersectFaceIndex == 0) {
-            euler = new THREE.Euler(MathUtils.degToRad(-getAngleDeg(this.heightRoof, this.baseSize.x / 2)),0, this.azimuth + Math.PI/2,"ZXY");
+            euler = new THREE.Euler(MathUtils.degToRad(getAngleDeg(this.heightRoof, this.baseSize.x / 2)), 0, this.azimuth + Math.PI / 2, "ZXY");
+        } else if (intersectFaceIndex == 0) {
+            euler = new THREE.Euler(MathUtils.degToRad(-getAngleDeg(this.heightRoof, this.baseSize.x / 2)), 0, this.azimuth + Math.PI / 2, "ZXY");
         }
         panel.euler = euler;
         panel.model.setRotationFromEuler(euler);

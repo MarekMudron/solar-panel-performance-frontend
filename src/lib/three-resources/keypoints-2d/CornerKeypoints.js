@@ -2,7 +2,7 @@ import { Sprite, SpriteMaterial, Vector3, Group } from "three";
 import { getMapPlanePosition } from "../Raycaster";
 import { addOp } from "../UndoRedo";
 import { getSphere } from "../polygonFactory";
-
+import { fadeAll, unfadeAll } from "../Site";
 export var cornerKeypoints = [];
 
 
@@ -44,6 +44,7 @@ class CornerKeypoints {
             catchAngle = 2 * Math.PI - catchAngle;
         }
         this.startAngle = catchAngle;
+        fadeAll()
     }
 
     performCommand() {
@@ -62,6 +63,7 @@ class CornerKeypoints {
     }
 
     finishCommand() {
+        unfadeAll()
         addOp((state) => state[0].rotateTo(state[1]),
             (state) => state[0].rotateTo(state[2]),
             [this.block, this.posunOdZaciatku, this.startAzimuth])
@@ -73,4 +75,9 @@ export function createKeypointFor(block) {
     let cp = new CornerKeypoints(block);
     cornerKeypoints.push(cp)
     return cp
+}
+
+export function removeCornersKPFor(block) {
+    cornerKeypoints = cornerKeypoints.filter(element => element.block !== block);
+
 }

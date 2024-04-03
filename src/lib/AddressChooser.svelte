@@ -106,8 +106,8 @@ let searchInput;
 </script>
 
 <form method="POST" id="location-form" on:submit|preventDefault={setMarker}>
-    <div class="form-group">
-        <label for="address-field">Address</label>
+    <div class="form-group d-flex justify-content-center">
+        <!-- <label for="address-field">Address</label> -->
         <input
             class="form-control"
             name="address-field"

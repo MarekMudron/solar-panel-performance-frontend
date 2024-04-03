@@ -1,6 +1,7 @@
 import { Vector3, PlaneGeometry, MeshBasicMaterial, Mesh, DoubleSide, Group, Color } from "three";
 import { getMapPlanePosition } from "../Raycaster";
 import { addOp } from "../UndoRedo";
+import { fadeAll, unfadeAll } from "../Site";
 
 export var edgeKeypoints = [];
 
@@ -9,10 +10,10 @@ class EdgeKeypoints {
         this.block = block;
         this.model = this.initModel();
         this.block.addEventListener("resize", (requiredSize) => {
-            this.model.children[0].scale.set(1/requiredSize.x,1 ,1)
-            this.model.children[1].scale.set(1/requiredSize.x ,1,1)
-            this.model.children[2].scale.set(1,1 /requiredSize.y,1)
-            this.model.children[3].scale.set(1 ,1/requiredSize.y,1)
+            this.model.children[0].scale.set(1 / requiredSize.x, 1, 1)
+            this.model.children[1].scale.set(1 / requiredSize.x, 1, 1)
+            this.model.children[2].scale.set(1, 1 / requiredSize.y, 1)
+            this.model.children[3].scale.set(1, 1 / requiredSize.y, 1)
         })
     }
 
@@ -53,7 +54,7 @@ class EdgeKeypoints {
         g.add(plane2);
 
         let geometry3 = new PlaneGeometry(1, 0.5);
-        let material3 = new MeshBasicMaterial({ visible: true,  side: DoubleSide });
+        let material3 = new MeshBasicMaterial({ visible: true, side: DoubleSide });
         let plane3 = new Mesh(geometry3, material3);
         plane3.name = "Edge Mesh 2"
         plane3.renderOrder = 900
@@ -69,7 +70,7 @@ class EdgeKeypoints {
         g.add(plane3);
 
         let geometry4 = new PlaneGeometry(1, 0.5);
-        let material4 = new MeshBasicMaterial({ visible: true,  side: DoubleSide });
+        let material4 = new MeshBasicMaterial({ visible: true, side: DoubleSide });
         let plane4 = new Mesh(geometry4, material4);
         plane4.name = "Edge Mesh 3"
         plane4.renderOrder = 900
@@ -138,12 +139,12 @@ class EdgeKeypoints {
         }
         this.start = start;
         this.end = end;
-
+        fadeAll()
     }
 
     performCommand() {
         let currentPoint = getMapPlanePosition();
-        let [offset, vec] = this.pointLineDistance(currentPoint, this.start, this.end );
+        let [offset, vec] = this.pointLineDistance(currentPoint, this.start, this.end);
         this.newSize = this.startHouseSize.clone()
         this.newPos = this.startHousePos.clone();
         console.log("offset", offset, "newsize", this.newSize);
@@ -155,7 +156,7 @@ class EdgeKeypoints {
             this.block.moveHorizontally(this.newPos)
         }
         else if (this.edgeIndex == 1) {
-            this.newSize.x =  this.newSize.x - offset;
+            this.newSize.x = this.newSize.x - offset;
             this.block.setModelSize(this.newSize)
             console.log("newSize1", this.newSize.x);
             this.newPos.add(vec.multiplyScalar(0.5));
@@ -176,10 +177,11 @@ class EdgeKeypoints {
     }
 
     finishCommand() {
+        unfadeAll()
         addOp((state) => { state[0].setModelSize(state[1]); state[0].moveHorizontally(state[2]) },
             (state) => { state[0].setModelSize(state[3]); state[0].moveHorizontally(state[4]) },
             [this.block, this.newSize, this.newPos, this.startHouseSize, this.startHousePos,])
-        this.edgeIndex=null;
+        this.edgeIndex = null;
     }
 }
 
@@ -188,4 +190,8 @@ export function createKeypointFor(block) {
     let cp = new EdgeKeypoints(block);
     edgeKeypoints.push(cp)
     return cp
+}
+
+export function removeEdgeKPFor(block) {
+    edgeKeypoints = edgeKeypoints.filter(element => element.block !== block);
 }

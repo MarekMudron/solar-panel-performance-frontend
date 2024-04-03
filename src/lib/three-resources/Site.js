@@ -6,8 +6,8 @@ export function addBlock(block) {
 	add(block.modelGroup)
 }
 
-
 export function removeBlock(block) {
+	console.log(block);
 	blocks = blocks.filter(item => item !== block);
 	remove(block.modelGroup)
 }
@@ -21,5 +21,17 @@ export function modelsTo3d() {
 export function modelsTo2d() {
 	blocks.forEach(block => {
 		block.as2d();
+	});
+}
+
+export function fadeAll() {
+	blocks.forEach(block => {
+		block.fade();
+	});
+}
+
+export function unfadeAll() {
+	blocks.forEach(block => {
+		block.unfade();
 	});
 }

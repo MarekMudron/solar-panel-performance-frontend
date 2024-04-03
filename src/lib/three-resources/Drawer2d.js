@@ -2,14 +2,22 @@ import { canvas } from "$lib/three-resources/Canvas.js"
 import { getMapPlanePosition } from "$lib/three-resources/Raycaster.js"
 import { add, scene } from "$lib/three-resources/Scene.js"
 import { LineBasicMaterial, BufferGeometry, Line, Vector3 } from "three";
-import {addBlock, removeBlock} from "./Site"
+import {addBlock, removeBlock,fadeAll, unfadeAll} from "./Site"
 import { activate2dKeypoints } from "./keypoints-2d/Keypoints2d.js";
 import { addOp } from "./UndoRedo";
+import { deactivateRemover } from "./Remover.js";
+
 let blockFactoryFunc;
 
 export function activate(blockFactoryFunc_) {
+    deactivateRemover()
     blockFactoryFunc = blockFactoryFunc_
     canvas.addEventListener("pointerup", drawLine);
+    fadeAll()
+}
+
+export function deactivateDrawer2d() {
+    canvas.removeEventListener("pointerup", drawLine);
 }
 
 function makeLine(start3d, end3d) {
@@ -100,7 +108,7 @@ function drawLine() {
 }
 
 function finishRect() {
-    
+    unfadeAll()
     canvas.removeEventListener("pointerup", finishRect);
     canvas.removeEventListener("pointermove", blockMove);
     activate2dKeypoints();

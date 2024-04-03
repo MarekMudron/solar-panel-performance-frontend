@@ -134,3 +134,7 @@ export function createKeypointFor(block) {
     stitKeypoints.push(cp)
     return cp
 }
+
+export function removeStitKPFor(block) {
+    stitKeypoints = stitKeypoints.filter(element => element.block !== block);
+}

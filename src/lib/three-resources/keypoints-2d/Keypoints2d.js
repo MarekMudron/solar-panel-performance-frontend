@@ -44,6 +44,9 @@ function startCommand() {
         canvas.addEventListener("pointerup", finishCommand);
         deactivateFeedback();
     }
+    if(keypoint) {
+        keypoint.block.fade();
+    }
 }
 
 function performCommand() {
@@ -52,10 +55,14 @@ function performCommand() {
 
 function finishCommand() {
     currentOperation.finishCommand();
+    if(currentOperation) {
+        currentOperation.block.unfade();
+    }
     currentOperation = null;
     canvas.removeEventListener("pointermove", performCommand);
     canvas.removeEventListener("pointerup", finishCommand);
     activateFeedback()
+    
 }
 
 

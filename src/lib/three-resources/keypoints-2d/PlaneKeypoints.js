@@ -1,6 +1,8 @@
-import { PlaneGeometry,MeshBasicMaterial, Mesh, DoubleSide } from "three";
+import { PlaneGeometry, MeshBasicMaterial, Mesh, DoubleSide } from "three";
 import { getMapPlanePosition } from "../Raycaster";
 import { addOp } from "../UndoRedo";
+import { fadeAll, unfadeAll } from "../Site";
+
 
 export var planeKeypoints = [];
 
@@ -8,12 +10,12 @@ class PlaneKeypoint {
     constructor(block) {
         this.block = block;
         this.model = this.initModel();
-       
+
     }
 
     initModel() {
         const geometry = new PlaneGeometry(1, 1);
-        const material = new MeshBasicMaterial({ visible: false, transparent:true, opacity:0.5, color: 0xffffff, side: DoubleSide });
+        const material = new MeshBasicMaterial({ visible: false, transparent: true, opacity: 0.5, color: 0xffffff, side: DoubleSide });
         const plane = new Mesh(geometry, material);
         plane.name = "Keypoint Mesh"
         plane.renderOrder = 3;
@@ -30,6 +32,7 @@ class PlaneKeypoint {
         this.diffVec = {};
         this.diffVec.x = this.block.position.x - cursorOnPlanePos.x;
         this.diffVec.y = this.block.position.y - cursorOnPlanePos.y;
+        fadeAll()
     }
 
     performCommand() {
@@ -39,8 +42,9 @@ class PlaneKeypoint {
     }
 
     finishCommand() {
-        addOp((state) => {  state[0].moveHorizontally(state[1]) },
-            (state) => { state[0].moveHorizontally(state[2])},
+        unfadeAll()
+        addOp((state) => { state[0].moveHorizontally(state[1]) },
+            (state) => { state[0].moveHorizontally(state[2]) },
             [this.block, this.finalPos, this.startHousePos,])
     }
 }
@@ -50,4 +54,8 @@ export function createKeypointFor(block) {
     let cp = new PlaneKeypoint(block);
     planeKeypoints.push(cp)
     return cp
+}
+
+export function removePlaneKPFor(block) {
+    planeKeypoints = planeKeypoints.filter(element => element.block !== block);
 }

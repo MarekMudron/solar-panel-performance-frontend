@@ -326,6 +326,29 @@ export class ValbovaBlock extends RoofBlock {
         return g;
     }
 
+    alignPanel(panel, intersectFaceIndex) {
+        if (![0, 1, 2, 3, 4, 5].includes(intersectFaceIndex)) {
+            return false;
+        }
+        var euler;
+        if (intersectFaceIndex == 3 || intersectFaceIndex == 2) {
+            euler = new THREE.Euler(MathUtils.degToRad(-getAngleDeg(this.heightRoof, this.baseSize.y / 2)), 0, this.azimuth, "ZXY");
+        } else if (intersectFaceIndex == 1 || intersectFaceIndex == 0) {
+            euler = new THREE.Euler(MathUtils.degToRad(getAngleDeg(this.heightRoof, this.baseSize.y / 2)), 0, this.azimuth, "ZXY");
+        } else if (intersectFaceIndex == 4) {
+            euler = new THREE.Euler(MathUtils.degToRad(-getAngleDeg(this.heightRoof, this.depthValb)), 0, this.azimuth + Math.PI / 2, "ZXY");
+        } else if (intersectFaceIndex == 5) {
+            euler = new THREE.Euler(MathUtils.degToRad(getAngleDeg(this.heightRoof, this.depthValb)), 0, this.azimuth + Math.PI / 2, "ZXY");
+        }
+        panel.euler = euler;
+        panel.model.setRotationFromEuler(euler);
+        return true;
+    }
+
+    isSide(faceIndex) {
+        return faceIndex == 4 || faceIndex == 5;
+    }
+
 
 }
 

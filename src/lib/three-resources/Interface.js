@@ -1,5 +1,5 @@
 import { activate } from "$lib/three-resources/Drawer2d.js"
-import { createIhlanova, createPultova, createSedlova, createValbova } from "./BlockFactory";
+import { createIhlanova, createPultova, createSedlova, createValbova,createPlocha } from "./BlockFactory";
 import { deactivate2dKeypoints } from "./keypoints-2d/Keypoints2d.js";
 import { deactivate3dKeypoints } from "./keypoints-3d/Keypoints3d.js";
 
@@ -26,6 +26,12 @@ export function drawValbova() {
 
 export function drawPultova() {
     activate(createPultova)
+    deactivate2dKeypoints()
+    deactivate3dKeypoints()
+}
+
+export function drawPlocha() {
+    activate(createPlocha)
     deactivate2dKeypoints()
     deactivate3dKeypoints()
 }

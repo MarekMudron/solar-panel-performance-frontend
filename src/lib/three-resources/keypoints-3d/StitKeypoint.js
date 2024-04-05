@@ -128,6 +128,9 @@ class StitKeypoint {
 }
 
 export function createKeypointFor(block) {
+    if(block.constructor.name == "PlochaBlock") {
+        return null;
+    }
     let cp = new StitKeypoint(block);
     stitKeypoints.push(cp)
     return cp

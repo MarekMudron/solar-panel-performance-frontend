@@ -71,11 +71,12 @@ class ValbKeypoint {
         );
         this.pointIntersected = intersect.object
         let sizeAlongAxis = this.block.baseSize.x;
-        console.log(this.pointIntersected);
         let [start, end] = this.getStartEndInWS(this.pointIntersected, sizeAlongAxis, this.dirVec, Math.PI / 2)
         this.start = start;
         this.end = end;
         this.startValbDepth = this.block.depthValb;
+        fadeAll()
+
     }
 
     performCommand() {

@@ -1,4 +1,4 @@
-import { SedlovaBlock, IhlanovaBlock, ValbovaBlock, PultovaBlock } from "./Blocks";
+import { SedlovaBlock, IhlanovaBlock, ValbovaBlock, PultovaBlock, PlochaBlock } from "./Blocks";
 import { Vector3 } from "three"
 
 
@@ -23,4 +23,8 @@ export function createValbova(sideLength, angle) {
 
 export function createPultova(sideLength, angle) {
     return new PultovaBlock(defaultPosition(), new Vector3(sideLength, 0, DEFAULT_BASE_HEIGHT), DEFAULT_ROOF_HEIGHT, angle)
+}
+
+export function createPlocha(sideLength, angle) {
+    return new PlochaBlock(defaultPosition(), new Vector3(sideLength, 0, DEFAULT_BASE_HEIGHT), angle)
 }

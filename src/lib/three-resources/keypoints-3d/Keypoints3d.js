@@ -9,8 +9,12 @@ import { deactivate3dFeedback, activate3dFeedback } from "./Keypoints3dFeedback.
 var currentOperation;
 
 function startCommand() {
-    let [intersect, keypoint] = getClosestIntersect(Valb.valbKeypoints, keypoint => {
-        return keypoint.model.children;
+    let [intersect, keypoint] = getClosestIntersect(Stit.stitKeypoints, keypoint => {
+        if (keypoint != null)
+            return [keypoint.model];
+        else {
+            return []
+        }
     });
     if (intersect != null) {
         currentOperation = keypoint
@@ -20,21 +24,11 @@ function startCommand() {
         deactivate3dFeedback()
         return;
     }
-     [intersect, keypoint] = getClosestIntersect(Stit.stitKeypoints, keypoint => {
-        return [keypoint.model];
-    });
-    if (intersect != null) {
-        currentOperation = keypoint
-        currentOperation.startCommand(intersect);
-        canvas.addEventListener("pointermove", performCommand);
-        canvas.addEventListener("pointerup", finishCommand);
-        deactivate3dFeedback()
-        return;
-    }
-    
+
     [intersect, keypoint] = getClosestIntersect(Roof.roofKeypoints, keypoint => {
         return [keypoint.model];
     });
+    console.log(intersect);
     if (intersect != null) {
         currentOperation = keypoint
         currentOperation.startCommand(intersect);
@@ -44,7 +38,7 @@ function startCommand() {
 
         return;
     }
-    
+
 }
 
 
@@ -64,13 +58,13 @@ function finishCommand() {
 
 export function activate3dKeypoints() {
     activate3dFeedback()
-        canvas.addEventListener("pointerdown", startCommand);
-    Stit.stitKeypoints.forEach(keypoint => {
-        keypoint.model.visible = true;
-    })
-    // Valb.valbKeypoints.forEach(keypoint => {
-    //     keypoint.model.visible = true;
-    // })
+    canvas.addEventListener("pointerdown", startCommand);
+    try {
+        Stit.stitKeypoints.forEach(keypoint => {
+            keypoint.model.visible = true;
+        })
+    } catch (exception) {
+    }
 
 }
 
@@ -90,12 +84,12 @@ export function deactivate3dKeypoints() {
 export function createRoofKeypoints(block) {
     let stitKeypoint = Stit.createKeypointFor(block)
     let roofKeypoint = Roof.createKeypointFor(block)
-    //let valbKeypoint = Valb.createKeypointFor(block)
-    Stit.stitKeypoints.push(stitKeypoint);
-    Roof.roofKeypoints.push(roofKeypoint);
-    //Valb.valbKeypoints.push(valbKeypoint);
+    console.log("PUSH", roofKeypoint);
+    //Roof.roofKeypoints.push(roofKeypoint);
     let model = new Group();
-    model.add(stitKeypoint.model);
-    //model.add(valbKeypoint.model);
+    if (stitKeypoint != null) {
+        Stit.stitKeypoints.push(stitKeypoint);
+        model.add(stitKeypoint.model);
+    }
     return model;
 }

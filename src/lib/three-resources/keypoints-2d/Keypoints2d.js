@@ -135,7 +135,6 @@ export function createKeypoints(block) {
         let valbKeypoint = Valb.createKeypointFor(block)
         g.add(valbKeypoint.model);
     }
-    
     g.add(planeKeypoint.model);
     g.add(cornerKeypoint.model);
     g.add(edgeKeypoint.model);

@@ -13,8 +13,8 @@ raycaster.params.Points.threshold = 0.01;
 
 function getScreenPlanePosition() {
     return new Vector2(
-        ( (event.clientX - canvas.offsetLeft) / canvas.clientWidth ) * 2 - 1,
-        ( (event.clientY - canvas.offsetTop) / canvas.clientHeight ) * -2 + 1);
+        ((event.clientX - canvas.offsetLeft) / canvas.clientWidth) * 2 - 1,
+        ((event.clientY - canvas.offsetTop) / canvas.clientHeight) * -2 + 1);
 }
 
 export function getMapPlanePosition() {
@@ -41,7 +41,7 @@ export function getIntersectWithOneOf(keypoints, fnToGetModel) {
 
         if (intersects.length > 0) {
             return [intersects[0], keypoint]
-            
+
         }
     }
     return [null, null]
@@ -49,19 +49,19 @@ export function getIntersectWithOneOf(keypoints, fnToGetModel) {
 
 export function getClosestIntersect(keypoints, fnToGetModel) {
     raycaster.setFromCamera(getScreenPlanePosition(), camera);
-    var closestIntersect= {intersect:null, keypoint :null};
-	var closestDistance;
+    var closestIntersect = { intersect: null, keypoint: null };
+    var closestDistance;
     for (const keypoint of keypoints) {
         let intersects = raycaster.intersectObjects(fnToGetModel(keypoint));
         if (intersects.length > 0) {
             let intersect = intersects[0]
-            if(closestIntersect.intersect != null) {
-                if(intersect.distance < closestDistance) {
+            if (closestIntersect.intersect != null) {
+                if (intersect.distance < closestDistance) {
                     closestDistance = intersect.distance;
-                    closestIntersect = {intersect: intersect, keypoint: keypoint};
+                    closestIntersect = { intersect: intersect, keypoint: keypoint };
                 }
-            }else {
-                closestIntersect = {intersect: intersect, keypoint: keypoint};
+            } else {
+                closestIntersect = { intersect: intersect, keypoint: keypoint };
                 closestDistance = intersect.distance;
             }
         }
@@ -72,19 +72,19 @@ export function getClosestIntersect(keypoints, fnToGetModel) {
 
 export function getIntersectWithRoofs() {
     raycaster.setFromCamera(getScreenPlanePosition(), camera);
-    var closestIntersect= {intersect:null, keypoint :null};
-	var closestDistance;
+    var closestIntersect = { intersect: null, keypoint: null };
+    var closestDistance;
     for (const block of blocks) {
         let intersects = raycaster.intersectObject(block.roofGroup);
         if (intersects.length > 0) {
             let intersect = intersects[0]
-            if(closestIntersect.intersect != null) {
-                if(intersect.distance < closestDistance) {
+            if (closestIntersect.intersect != null) {
+                if (intersect.distance < closestDistance) {
                     closestDistance = intersect.distance;
-                    closestIntersect = {intersect: intersect, block: block};
+                    closestIntersect = { intersect: intersect, block: block };
                 }
-            }else {
-                closestIntersect = {intersect: intersect, block: block};
+            } else {
+                closestIntersect = { intersect: intersect, block: block };
                 closestDistance = intersect.distance;
             }
         }

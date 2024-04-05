@@ -16,6 +16,7 @@
         drawIhlanova,
         drawPultova,
         drawValbova,
+        drawPlocha
     } from "$lib/three-resources/Interface.js";
     import { serialize2dKeypoints } from "$lib/three-resources/keypoints-2d/Keypoints2d.js";
     import { activateRemover } from "$lib/three-resources/Remover.js";
@@ -84,13 +85,6 @@
     >
 </div>
 
-<style>
-    .mode-button-label:not(active) {
-        background-color: black;
-        color:rgba(128,128,128,0.5);
-    }
-</style>
-
 <div
     class="hstack position-absolute end-0 translate-middle-y btn-group"
     style="top:100px;"
@@ -107,7 +101,9 @@
             setTo2d();
         }}
     />
-    <label class="btn btn-outline-warning mode-button-label" for="radioto2d">2D</label>
+    <label class="btn btn-outline-warning mode-button-label" for="radioto2d"
+        >2D</label
+    >
 
     <input
         type="radio"
@@ -121,7 +117,9 @@
             setTo3d();
         }}
     />
-    <label class="btn btn-outline-warning mode-button-label" for="radioto3d">3D</label>
+    <label class="btn btn-outline-warning mode-button-label" for="radioto3d"
+        >3D</label
+    >
     <!-- <button
         type="button"
         class="btn btn-warning btn-block mb-2"
@@ -178,13 +176,29 @@
             drawPultova();
         }}>Pultova strecha</button
     >
+    <button
+        type="button"
+        class="btn btn-primary btn-block mb-2"
+        style="display:{visible2d}"
+        on:click={() => {
+            setAsDirty();
+            drawPlocha();
+        }}>Pultova strecha</button
+    >
 
     <button
         type="button"
         class="btn btn-danger btn-block mb-2"
         style="display:{visible2d}"
         on:click={() => {
-            activateRemover()
+            activateRemover();
         }}>Remove</button
     >
 </div>
+
+<style>
+    .mode-button-label:not(active) {
+        background-color: black;
+        color: rgba(128, 128, 128, 0.5);
+    }
+</style>

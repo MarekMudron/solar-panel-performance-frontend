@@ -67,21 +67,25 @@ class RoofBlock {
         this.modelGroup.add(this.baseGroup);
         this.keyPointsGroup = createKeypoints(this);
         this.modelGroup.add(this.keyPointsGroup);
+
         this.as2d()
         this.moveHorizontally(pos2d);
+        
     }
 
     fade() {
         // base completely opaque
         this.baseGroup.visible = false;
         setOpacity(this.roofGroup, 0.5)
-        this.keyPointsGroup.visible = false
+        if (this.keyPointsGroup)
+            this.keyPointsGroup.visible = false
     }
 
     unfade() {
         this.baseGroup.visible = true;
         setOpacity(this.roofGroup, 1)
-        this.keyPointsGroup.visible = true
+        if (this.keyPointsGroup)
+            this.keyPointsGroup.visible = true
     }
 
     addEventListener(event, callback) {
@@ -379,5 +383,33 @@ export class PultovaBlock extends RoofBlock {
         g.scale.set(this.baseSize.x, this.baseSize.y, this.heightRoof);
         return g;
     }
+}
 
+export class PlochaBlock extends RoofBlock {
+    constructor(position, size, azimuth) {
+        super(position, size, 0.0001, azimuth);
+        this.roofGroup = this.initRoof();	// Group consisting of wireframe and filling
+        this.modelGroup.add(this.roofGroup);
+        this.rotateTo(azimuth)
+        this.roofKeyPointsGroup = createRoofKeypoints(this);
+        this.roofGroup.add(this.roofKeyPointsGroup);
+    }
+
+    initRoof() {
+        let g = new THREE.Group();
+        const pultFilling = polygonFactory.getPult();
+        g.add(pultFilling);
+        var geo = new THREE.EdgesGeometry(pultFilling.geometry);
+        var mat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true });
+        var wireframe = new THREE.LineSegments(geo, mat);
+        wireframe.name = "linesegments"
+        g.add(wireframe);
+        g.userData.isRoof = true;
+        g.userData.isBase = false;
+        g.userData.hoverColor = roofHoverColor;
+        g.userData.mainColor = roofColor;
+        g.position.setZ(this.baseSize.z);
+        g.scale.set(this.baseSize.x, this.baseSize.y, this.heightRoof);
+        return g;
+    }
 }

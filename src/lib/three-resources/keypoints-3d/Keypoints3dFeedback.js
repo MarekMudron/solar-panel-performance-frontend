@@ -19,19 +19,24 @@ function disableStit() {
 }
 
 function feedbackTop() {
-    let [intersect, keypoint] = getClosestIntersect(Stit.stitKeypoints, keypoint => {
-        return [keypoint.model];
-    });
-    if (hoveredStit != null) {
-        if (intersect == null) {
-            disableStit();
+    try {
+        let [intersect, keypoint] = getClosestIntersect(Stit.stitKeypoints, keypoint => {
+            return [keypoint.model];
+        });
+        if (hoveredStit != null) {
+            if (intersect == null) {
+                disableStit();
+            }
+        } else {
+            if (intersect != null) {
+                disableRoof()
+                enableStit(intersect)
+            }
         }
-    } else {
-        if (intersect != null) {
-            disableRoof()
-            enableStit(intersect)
-        }
+    }catch(exception) {
+        return false;
     }
+    
     return false;
 }
 
@@ -49,9 +54,12 @@ function disableRoof() {
 
 
 function feedbackRoof() {
+    console.log(Roof.roofKeypoints);
     let [intersect, keypoint] = getClosestIntersect(Roof.roofKeypoints, keypoint => {
+        console.log(keypoint);
         return [keypoint.model];
     });
+    console.log(intersect);
     if (hoveredRoof != null) {
         if (intersect == null) {
             disableRoof()

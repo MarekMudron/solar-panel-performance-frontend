@@ -5,6 +5,7 @@ import { activateFeedback, deactivateFeedback } from "./Keypoints2dFeedback.js";
 import * as Corner from "./CornerKeypoints.js"
 import * as Edge from "./EdgeKeypoints.js"
 import * as Plane from "./PlaneKeypoints.js"
+import * as Valb from "./ValbKeypoints.js"
 
 
 
@@ -15,6 +16,19 @@ function startCommand() {
     if (intersect != null) {
         currentOperation = keypoint
         currentOperation.startCommand();
+        canvas.addEventListener("pointermove", performCommand);
+        canvas.addEventListener("pointerup", finishCommand);
+        deactivateFeedback();
+
+        return;
+    }
+
+    [intersect, keypoint] = getIntersectWithOneOf(Valb.valbKeypoints, keypoint => {
+        return keypoint.model.children;
+    });
+    if (intersect != null) {
+        currentOperation = keypoint
+        currentOperation.startCommand(intersect);
         canvas.addEventListener("pointermove", performCommand);
         canvas.addEventListener("pointerup", finishCommand);
         deactivateFeedback();
@@ -78,7 +92,9 @@ export function activate2dKeypoints() {
     Edge.edgeKeypoints.forEach(keypoint => {
         keypoint.model.visible = true;
     })
-
+    Valb.valbKeypoints.forEach(keypoint => {
+        keypoint.model.visible = true;
+    })
 }
 
 export function deactivate2dKeypoints() {
@@ -91,6 +107,9 @@ export function deactivate2dKeypoints() {
     Edge.edgeKeypoints.forEach(keypoint => {
         keypoint.model.visible = false;
     })
+    Valb.valbKeypoints.forEach(keypoint => {
+        keypoint.model.visible = false;
+    })
 }
 
 
@@ -100,18 +119,23 @@ export function serialize2dKeypoints() {
     return {
         planeKeypoints: Plane.planeKeypoints,
         cornerKeypoints: Corner.cornerKeypoints,
-        edgeKeypoints: Edge.edgeKeypoints
+        edgeKeypoints: Edge.edgeKeypoints,
+        valbKeypoints: Valb.valbKeypoints
     }
 }
 
 
 
 export function createKeypoints(block) {
-
+    let g = new Group();
     let planeKeypoint = Plane.createKeypointFor(block)
     let cornerKeypoint = Corner.createKeypointFor(block)
     let edgeKeypoint = Edge.createKeypointFor(block)
-    let g = new Group();
+    if(block.constructor.name == "ValbovaBlock") {
+        let valbKeypoint = Valb.createKeypointFor(block)
+        g.add(valbKeypoint.model);
+    }
+    
     g.add(planeKeypoint.model);
     g.add(cornerKeypoint.model);
     g.add(edgeKeypoint.model);

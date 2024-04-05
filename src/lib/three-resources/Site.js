@@ -7,7 +7,6 @@ export function addBlock(block) {
 }
 
 export function removeBlock(block) {
-	console.log(block);
 	blocks = blocks.filter(item => item !== block);
 	remove(block.modelGroup)
 }

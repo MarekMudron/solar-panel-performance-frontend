@@ -76,23 +76,6 @@ class RoofBlock {
         this.baseGroup.visible = false;
         setOpacity(this.roofGroup, 0.5)
         this.keyPointsGroup.visible = false
-        // roof partially opaque
-        // this.roofGroup.traverse(mesh => {
-        //     if (mesh instanceof THREE.Mesh) {
-        //         mesh.material.opacity = 0.5
-        //         mesh.needsUpdate = true;
-        //     }
-        //     else if (mesh instanceof THREE.Group) {
-        //         this.roofGroup.traverse(mesh => {
-        //             if (mesh instanceof THREE.Mesh) {
-        //                 mesh.material.opacity = 0.5
-        //                 mesh.needsUpdate = true;
-        //             }
-
-        //         })
-        //     }
-        // })
-        // keypoints partially opaque
     }
 
     unfade() {
@@ -136,7 +119,7 @@ class RoofBlock {
 
 
     as2d() {
-        this.modelGroup.scale.set(1, 1, 0.000000001)
+        this.modelGroup.scale.set(1, 1, 0.0001)
     }
 
     as3d() {
@@ -155,6 +138,9 @@ class RoofBlock {
                 return;
             }
             this.keyPointsGroup.scale.set(requiredSize.x, requiredSize.y, requiredSize.z)
+            console.log(this);
+            if (this.constructor.name == "ValbovaBlock")
+                this.setDepthValb(this.depthValb)
         });
         this.emitEvent("resize", requiredSize)
     }
@@ -267,7 +253,7 @@ export class IhlanovaBlock extends RoofBlock {
         const pyramidFilling = polygonFactory.getPyramid();
         g.add(pyramidFilling);
         var geo = new THREE.EdgesGeometry(pyramidFilling.geometry);
-        var mat = new THREE.LineBasicMaterial({ color: 0x000000 });
+        var mat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true });
         var wireframe = new THREE.LineSegments(geo, mat);
         g.add(wireframe);
         g.userData.isRoof = true;
@@ -321,7 +307,6 @@ export class ValbovaBlock extends RoofBlock {
         this.depthValb = requiredDepth;
         changeValb(this.roofGroup, requiredDepth / this.baseSize.x);
         this.emitEvent("valbChange", requiredDepth)
-
     }
 
     initRoof() {
@@ -329,7 +314,7 @@ export class ValbovaBlock extends RoofBlock {
         const roofFilling = polygonFactory.getValb();
         g.add(roofFilling);
         var wgeo = new THREE.EdgesGeometry(roofFilling.geometry);
-        var wmat = new THREE.LineBasicMaterial({ color: 0x000000 });
+        var wmat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true });
         var wireframe = new THREE.LineSegments(wgeo, wmat);
         g.add(wireframe);
         g.userData.isRoof = true;
@@ -338,7 +323,6 @@ export class ValbovaBlock extends RoofBlock {
         g.userData.mainColor = roofColor;
         g.position.setZ(this.baseSize.z);
         g.scale.set(this.baseSize.x, this.baseSize.y, this.heightRoof);
-
         return g;
     }
 
@@ -360,7 +344,7 @@ export class PultovaBlock extends RoofBlock {
         const pultFilling = polygonFactory.getPult();
         g.add(pultFilling);
         var geo = new THREE.EdgesGeometry(pultFilling.geometry);
-        var mat = new THREE.LineBasicMaterial({ color: 0x000000 });
+        var mat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true });
         var wireframe = new THREE.LineSegments(geo, mat);
         wireframe.name = "linesegments"
         g.add(wireframe);

@@ -67,14 +67,12 @@ class StitKeypoint {
             sprite.material.color = new Color(0x00bbd4)
             sprite.position.setZ(1);
             sprite.scale.set(1, 1, 1)
+            sprite.visible = false;
             return sprite
         } else if (this.block instanceof ValbovaBlock) {
             const geometry = new BoxGeometry(1, 1, 1);
             const material = new MeshBasicMaterial();
             const cube = new Mesh(geometry, material);
-            // cube.renderOrder = 10 || 999;
-            // cube.material.depthTest = false;
-            // cube.material.depthWrite = false;
             cube.userData.hoverColor = new Color(0x104d70)
             cube.userData.color = new Color(0x00bbd4)
             cube.material.color = new Color(0x00bbd4)

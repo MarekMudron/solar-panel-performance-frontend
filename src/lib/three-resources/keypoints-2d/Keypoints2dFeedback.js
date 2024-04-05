@@ -4,11 +4,13 @@ import { getIntersectWithOneOf } from "../Raycaster.js"
 import * as Corner from "./CornerKeypoints.js"
 import * as Edge from "./EdgeKeypoints.js"
 import * as Plane from "./PlaneKeypoints.js"
+import * as Valb from "./ValbKeypoints.js"
 
 
 let hoveredcorner;
 let hoveredEdge;
 let hoveredPlane;
+let hoveredValb;
 
 function enableCorners(intersect) {
     hoveredcorner = intersect.object;
@@ -37,6 +39,37 @@ function feedbackCorners() {
             disableEdges();
             disablePlane();
             enableCorners(intersect)
+        }
+    }
+}
+
+function enableValbs(intersect) {
+    hoveredValb = intersect.object;
+    intersect.object.material.color = intersect.object.userData.hoverColor;
+
+}
+
+function disableValbs() {
+    if(hoveredValb != null) {
+        hoveredValb.material.color = hoveredValb.userData.color
+        hoveredValb = null;    
+    }
+}
+
+function feedbackValbs() {
+    // eslint-disable-next-line no-unused-vars
+    let [intersect, _] = getIntersectWithOneOf(Valb.valbKeypoints, keypoint => {
+        return keypoint.model.children;
+    });
+    if(hoveredValb != null) {
+        if (intersect == null) {
+            disableValbs()
+        }
+    }else {
+        if (intersect != null) {
+            disableEdges();
+            disablePlane();
+            enableValbs(intersect)
         }
     }
 }
@@ -113,10 +146,14 @@ function feedbackPlane() {
 function feedback() {
     feedbackCorners();
     if(hoveredcorner == null) {
-        feedbackEdges();
-        if(hoveredEdge == null) {
-            feedbackPlane()
+        feedbackValbs();
+        if(hoveredValb == null) {
+            feedbackEdges();
+            if(hoveredEdge == null) {
+                feedbackPlane()
+            }
         }
+        
     }
 }
 

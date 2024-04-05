@@ -32,7 +32,7 @@ class EdgeKeypoints {
         plane1.position.setX(1 / 2)
         plane1.userData.hoverColor = new Color(0x104d70)
         plane1.userData.color = new Color(0x000000)
-        plane1.material.color = new Color(0x000000)
+        plane1.material.color = new Color(0xff0000)
         plane1.userData.lineIndex = 0
         plane1.updateMatrixWorld()
         g.add(plane1);
@@ -123,7 +123,6 @@ class EdgeKeypoints {
         let planeIntersected = intersect.object
         let sizeAlongAxis;
         let start, end;
-        console.log("edge index on start", this.edgeIndex);
         if (this.edgeIndex == 0) {
             sizeAlongAxis = this.block.baseSize.y;
             [start, end] = this.getStartEndInWS(planeIntersected, sizeAlongAxis, this.dirVec, Math.PI / 2)
@@ -147,18 +146,15 @@ class EdgeKeypoints {
         let [offset, vec] = this.pointLineDistance(currentPoint, this.start, this.end);
         this.newSize = this.startHouseSize.clone()
         this.newPos = this.startHousePos.clone();
-        console.log("offset", offset, "newsize", this.newSize);
         if (this.edgeIndex == 0) {
             this.newSize.x = offset + this.newSize.x;
             this.block.setModelSize(this.newSize)
-            console.log("newSize0", this.newSize.x);
             this.newPos.add(vec.multiplyScalar(0.5));
             this.block.moveHorizontally(this.newPos)
         }
         else if (this.edgeIndex == 1) {
             this.newSize.x = this.newSize.x - offset;
             this.block.setModelSize(this.newSize)
-            console.log("newSize1", this.newSize.x);
             this.newPos.add(vec.multiplyScalar(0.5));
             this.block.moveHorizontally(this.newPos)
         }

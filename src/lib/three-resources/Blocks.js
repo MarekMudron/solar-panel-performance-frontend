@@ -70,7 +70,7 @@ class RoofBlock {
 
         this.as2d()
         this.moveHorizontally(pos2d);
-        
+
     }
 
     fade() {
@@ -142,7 +142,6 @@ class RoofBlock {
                 return;
             }
             this.keyPointsGroup.scale.set(requiredSize.x, requiredSize.y, requiredSize.z)
-            console.log(this);
             if (this.constructor.name == "ValbovaBlock")
                 this.setDepthValb(this.depthValb)
         });
@@ -225,10 +224,16 @@ export class SedlovaBlock extends RoofBlock {
             return false;
         }
         var euler;
+        var ang;
+        if(panel.alignmentAngle != null) {
+            ang = panel.alignmentAngle
+        }else{
+            ang = getAngleDeg(this.heightRoof, this.baseSize.y / 2)
+        }
         if ([0, 1].includes(intersectFaceIndex)) {
-            euler = new THREE.Euler(MathUtils.degToRad(getAngleDeg(this.heightRoof, this.baseSize.y / 2)), 0, 0, "ZXY");
+            euler = new THREE.Euler(MathUtils.degToRad(ang), 0, 0, "ZXY");
         } else if ([2, 3].includes(intersectFaceIndex)) {
-            euler = new THREE.Euler(MathUtils.degToRad(-getAngleDeg(this.heightRoof, this.baseSize.y / 2)), 0, 0, "ZXY");
+            euler = new THREE.Euler(MathUtils.degToRad(-ang), 0, 0, "ZXY");
         }
         euler.z = this.azimuth;
         panel.euler = euler;
@@ -383,6 +388,21 @@ export class PultovaBlock extends RoofBlock {
         g.scale.set(this.baseSize.x, this.baseSize.y, this.heightRoof);
         return g;
     }
+
+    alignPanel(panel, intersectFaceIndex) {
+        if (![4, 5].includes(intersectFaceIndex)) {
+            return false;
+        }
+        var euler;
+        euler = new THREE.Euler(MathUtils.degToRad(getAngleDeg(this.heightRoof, this.baseSize.y)), 0, this.azimuth + Math.PI / 2, "ZXY");
+        panel.euler = euler;
+        panel.model.setRotationFromEuler(euler);
+        return true;
+    }
+
+    isSide(faceIndex) {
+        return faceIndex == 4 || faceIndex == 5;
+    }
 }
 
 export class PlochaBlock extends RoofBlock {
@@ -411,5 +431,20 @@ export class PlochaBlock extends RoofBlock {
         g.position.setZ(this.baseSize.z);
         g.scale.set(this.baseSize.x, this.baseSize.y, this.heightRoof);
         return g;
+    }
+
+    alignPanel(panel, intersectFaceIndex) {
+        if (![4, 5].includes(intersectFaceIndex)) {
+            return false;
+        }
+        var euler;
+        euler = new THREE.Euler(MathUtils.degToRad(getAngleDeg(this.heightRoof, this.baseSize.y)), 0, this.azimuth + Math.PI / 2, "ZXY");
+        panel.euler = euler;
+        panel.model.setRotationFromEuler(euler);
+        return true;
+    }
+
+    isSide(faceIndex) {
+        return faceIndex == 4 || faceIndex == 5;
     }
 }

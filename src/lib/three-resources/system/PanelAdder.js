@@ -40,7 +40,7 @@ function getLastPos(startPoint, endPoint, y) {
 }
 
 
-function getLastPos2(startPoint, endPoint, x) {
+function getLastPosOnSide(startPoint, endPoint, x) {
     let diffVec = startPoint.clone().sub(endPoint);
     let numx = x
     let num = (numx * currentPanel.size.y)
@@ -51,7 +51,7 @@ function getLastPos2(startPoint, endPoint, x) {
     return lastPos;
 }
 
-function getPanels2(block, faceIndex, startPoint, endPoint) {
+function getPanelsOnSide(block, faceIndex, startPoint, endPoint) {
     const panels = [];
     let diffVec = startPoint.clone().sub(endPoint);
     let numCols = Math.floor(Math.abs(diffVec.x / currentPanel.size.y)) + 1
@@ -65,7 +65,7 @@ function getPanels2(block, faceIndex, startPoint, endPoint) {
                 cp.y += j * (currentPanel.size.x);
             else
                 cp.y -= j * (currentPanel.size.x);
-            let lastPos = getLastPos2(startPoint, endPoint, i)
+            let lastPos = getLastPosOnSide(startPoint, endPoint, i)
             cp.x = lastPos.x
             cp.z = lastPos.z
             let pos = fromLocalToWorld(block, cp)
@@ -130,7 +130,7 @@ function drawPanels() {
                 remove(panel.model)
             });
             if(block.isSide(intersect.faceIndex)) {
-                panels = getPanels2(block, intersect.faceIndex, startPoint, endPoint);
+                panels = getPanelsOnSide(block, intersect.faceIndex, startPoint, endPoint);
 
             }else{
                 panels = getPanels(block, intersect.faceIndex, startPoint, endPoint);

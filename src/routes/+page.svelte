@@ -8,6 +8,8 @@
         didLocationChange,
     } from "../stores";
     import { onMount } from "svelte";
+    import rectangle from "$lib/assets/rectangle.jpg" 
+    import NewPanelModal from "../lib/NewPanelModal.svelte";
 
     let address;
     let addressCoords;
@@ -71,3 +73,11 @@
         </div>
     </div>
 </div>
+
+<button
+        class="btn btn-primary btn-block mb-2"
+        data-bs-toggle="modal"
+        data-bs-target="#newPanelDialog"
+        href="#">Add Template</button
+    >
+<NewPanelModal ></NewPanelModal>

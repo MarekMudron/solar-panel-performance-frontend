@@ -54,12 +54,9 @@ function disableRoof() {
 
 
 function feedbackRoof() {
-    console.log(Roof.roofKeypoints);
     let [intersect, keypoint] = getClosestIntersect(Roof.roofKeypoints, keypoint => {
-        console.log(keypoint);
         return [keypoint.model];
     });
-    console.log(intersect);
     if (hoveredRoof != null) {
         if (intersect == null) {
             disableRoof()

@@ -78,7 +78,6 @@ export class ValbKeypoint {
     performCommand() {
         var planeIP = getIntersectWithMesh(this.plane);
         let newIntersect = planeIP.point.clone().sub(this.startIntersect)
-        console.log(planeIP, newIntersect);
         newIntersect.z = 0;
         this.block.setDepthValb(newIntersect.x)
     }

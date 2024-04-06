@@ -82,7 +82,6 @@ class ValbKeypoint {
     performCommand() {
         let currentPoint = getMapPlanePosition();
         let [offset, vec] = this.pointLineDistance(currentPoint, this.start, this.end);
-        console.log(offset, vec);
         this.newdepth;
         if (this.pointIntersected.name == "s2")
             this.newdepth = this.startValbDepth - offset;

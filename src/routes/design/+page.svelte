@@ -120,23 +120,6 @@
     <label class="btn btn-outline-warning mode-button-label" for="radioto3d"
         >3D</label
     >
-    <!-- <button
-        type="button"
-        class="btn btn-warning btn-block mb-2"
-        on:click={() => {
-            is2d = true;
-            setTo2d();
-        }}>2d</button
-    >
-
-    <button
-        type="button"
-        class="btn btn-warning btn-block mb-2"
-        on:click={() => {
-            is2d = false;
-            setTo3d();
-        }}>3d</button
-    > -->
 </div>
 
 <div class="vstack position-absolute top-50 start-0 translate-middle-y">
@@ -183,7 +166,7 @@
         on:click={() => {
             setAsDirty();
             drawPlocha();
-        }}>Pultova strecha</button
+        }}>Plocha strecha</button
     >
 
     <button

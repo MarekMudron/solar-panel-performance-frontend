@@ -15,6 +15,7 @@ class Panel {
 		this.euler = new THREE.Euler();
 		this.size = new THREE.Vector2(template.width, template.height)
 		this.template = template;
+		this.alignmentAngle = template.alignmentAngle
 		this.model = this.initModel();
 		this.power = template.pp;
 		this.tempCoef = template.pmpp;
@@ -35,6 +36,10 @@ class Panel {
 	}
 
 	setPositionTo(pos3d) {
+		if(this.alignmentAngle) {
+			let offsetz = Math.sin(THREE.MathUtils.degToRad(this.alignmentAngle))*this.size.y;
+			pos3d.z += offsetz;
+		}
 		this.position = pos3d;
 		this.model.position.set(pos3d.x, pos3d.y, pos3d.z)
 	}

@@ -28,7 +28,6 @@ function startCommand() {
     [intersect, keypoint] = getClosestIntersect(Roof.roofKeypoints, keypoint => {
         return [keypoint.model];
     });
-    console.log(intersect);
     if (intersect != null) {
         currentOperation = keypoint
         currentOperation.startCommand(intersect);
@@ -84,7 +83,6 @@ export function deactivate3dKeypoints() {
 export function createRoofKeypoints(block) {
     let stitKeypoint = Stit.createKeypointFor(block)
     let roofKeypoint = Roof.createKeypointFor(block)
-    console.log("PUSH", roofKeypoint);
     //Roof.roofKeypoints.push(roofKeypoint);
     let model = new Group();
     if (stitKeypoint != null) {

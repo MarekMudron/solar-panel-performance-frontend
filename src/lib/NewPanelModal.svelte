@@ -1,6 +1,6 @@
 <script>
     import { createEventDispatcher } from "svelte";
-
+    import rectangle from "$lib/assets/rectangle.jpg";
     const dispatch = createEventDispatcher();
     let height;
     let width;
@@ -9,7 +9,7 @@
     let name;
 
     function asModel() {
-        return { name, height:height/1000, width:width/1000, pp, pmpp };
+        return { name, height: height / 1000, width: width / 1000, pp, pmpp };
     }
 </script>
 
@@ -49,8 +49,9 @@
                                 />
                             </div>
                         </div>
+
                         <div class="row">
-                            <div class="col">
+                            <div class="col-4 align-self-center">
                                 <label for="heightInput" class="form-label"
                                     >Height [mm]</label
                                 >
@@ -62,7 +63,17 @@
                                     bind:value={height}
                                 />
                             </div>
-                            <div class="col">
+                            <div class="col-4">
+                                <img
+                                    alt="rectangle"
+                                    src={rectangle}
+                                    class="py-2"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-center">
+                            <div class="col-4">
                                 <label for="widthInput" class="form-label"
                                     >Width[mm]</label
                                 >
@@ -75,6 +86,7 @@
                                 />
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col">
                                 <label for="ppinput" class="form-label"

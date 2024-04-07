@@ -11,16 +11,22 @@ class String {
     }
 
     addPanels(panels) {
-        this.panels = this.panels.concat(panels)
-        this.panels.forEach(panel => {
-            panel.setHighlighted(this.isActive);
+        this.panels.push(panels)
+        this.panels.forEach(panelBlock => {
+            if (panelBlock)
+                panelBlock.forEach(panel => {
+                    panel.setHighlighted(this.isActive);
+                });
         })
     }
 
     setActive(toActive) {
         this.isActive = toActive;
-        this.panels.forEach(panel => {
-            panel.setHighlighted(toActive);
+        this.panels.forEach(panelBlock => {
+            if (panelBlock)
+                panelBlock.forEach(panel => {
+                    panel.setHighlighted(toActive);
+                });
         })
     }
 }

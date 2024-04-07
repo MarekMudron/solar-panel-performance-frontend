@@ -225,19 +225,22 @@ export class SedlovaBlock extends RoofBlock {
         }
         var euler;
         var ang;
-        if(panel.alignmentAngle != null) {
+        if (panel.alignmentAngle != null) {
             ang = panel.alignmentAngle
-        }else{
+        } else {
             ang = getAngleDeg(this.heightRoof, this.baseSize.y / 2)
         }
         if ([0, 1].includes(intersectFaceIndex)) {
-            euler = new THREE.Euler(MathUtils.degToRad(ang), 0, 0, "ZXY");
+            euler = new THREE.Euler(MathUtils.degToRad(-ang), 0, Math.PI + this.azimuth, "ZXY");
         } else if ([2, 3].includes(intersectFaceIndex)) {
-            euler = new THREE.Euler(MathUtils.degToRad(-ang), 0, 0, "ZXY");
+            euler = new THREE.Euler(MathUtils.degToRad(-ang), 0, this.azimuth, "ZXY");
         }
-        euler.z = this.azimuth;
+
         panel.euler = euler;
         panel.model.setRotationFromEuler(euler);
+        console.log("house azimuth", MathUtils.radToDeg(this.azimuth));
+        console.log("azimuth:", MathUtils.radToDeg(euler.z));
+        console.log("incidence:", MathUtils.radToDeg(euler.x));
         return true;
     }
 
@@ -271,24 +274,33 @@ export class IhlanovaBlock extends RoofBlock {
         g.userData.mainColor = roofColor;
         g.position.setZ(this.baseSize.z);
         g.scale.set(this.baseSize.x, this.baseSize.y, this.heightRoof);
+
         return g;
     }
 
     alignPanel(panel, intersectFaceIndex) {
+        console.log(intersectFaceIndex);
         if (![0, 1, 2, 3].includes(intersectFaceIndex)) {
             return false;
         }
         var euler;
         if (intersectFaceIndex == 3) {
-            euler = new THREE.Euler(MathUtils.degToRad(getAngleDeg(this.heightRoof, this.baseSize.y / 2)), 0, this.azimuth, "ZXY");
+            let ang = getAngleDeg(this.heightRoof, this.baseSize.y / 2)
+            euler = new THREE.Euler(MathUtils.degToRad(-ang), 0, this.azimuth + Math.PI, "ZXY");
         } else if (intersectFaceIndex == 1) {
-            euler = new THREE.Euler(MathUtils.degToRad(-getAngleDeg(this.heightRoof, this.baseSize.y / 2)), 0, this.azimuth, "ZXY");
+            let ang = getAngleDeg(this.heightRoof, this.baseSize.y / 2)
+            euler = new THREE.Euler(MathUtils.degToRad(-ang), 0, this.azimuth, "ZXY");
         } else if (intersectFaceIndex == 2) {
-            euler = new THREE.Euler(MathUtils.degToRad(getAngleDeg(this.heightRoof, this.baseSize.x / 2)), 0, this.azimuth + Math.PI / 2, "ZXY");
+            let ang = getAngleDeg(this.heightRoof, this.baseSize.x / 2)
+            euler = new THREE.Euler(MathUtils.degToRad(-ang), 0, this.azimuth + 3 * Math.PI / 2, "ZXY");
         } else if (intersectFaceIndex == 0) {
-            euler = new THREE.Euler(MathUtils.degToRad(-getAngleDeg(this.heightRoof, this.baseSize.x / 2)), 0, this.azimuth + Math.PI / 2, "ZXY");
+            let ang = getAngleDeg(this.heightRoof, this.baseSize.x / 2)
+            euler = new THREE.Euler(MathUtils.degToRad(-ang), 0, this.azimuth + Math.PI / 2, "ZXY");
         }
         panel.euler = euler;
+        console.log("house azimuth", MathUtils.radToDeg(this.azimuth));
+        console.log("azimuth:", MathUtils.radToDeg(euler.z));
+        console.log("incidence:", MathUtils.radToDeg(euler.x));
         panel.model.setRotationFromEuler(euler);
         return true;
     }
@@ -336,20 +348,28 @@ export class ValbovaBlock extends RoofBlock {
     }
 
     alignPanel(panel, intersectFaceIndex) {
+        console.log(intersectFaceIndex);
         if (![0, 1, 2, 3, 4, 5].includes(intersectFaceIndex)) {
             return false;
         }
         var euler;
         if (intersectFaceIndex == 3 || intersectFaceIndex == 2) {
-            euler = new THREE.Euler(MathUtils.degToRad(-getAngleDeg(this.heightRoof, this.baseSize.y / 2)), 0, this.azimuth, "ZXY");
+            let ang = getAngleDeg(this.heightRoof, this.baseSize.y / 2)
+            euler = new THREE.Euler(MathUtils.degToRad(-ang), 0, this.azimuth, "ZXY");
         } else if (intersectFaceIndex == 1 || intersectFaceIndex == 0) {
-            euler = new THREE.Euler(MathUtils.degToRad(getAngleDeg(this.heightRoof, this.baseSize.y / 2)), 0, this.azimuth, "ZXY");
+            let ang = getAngleDeg(this.heightRoof, this.baseSize.y / 2)
+            euler = new THREE.Euler(MathUtils.degToRad(-ang), 0, this.azimuth + Math.PI, "ZXY");
         } else if (intersectFaceIndex == 4) {
-            euler = new THREE.Euler(MathUtils.degToRad(-getAngleDeg(this.heightRoof, this.depthValb)), 0, this.azimuth + Math.PI / 2, "ZXY");
+            let ang = getAngleDeg(this.heightRoof, this.baseSize.x / 2)
+            euler = new THREE.Euler(MathUtils.degToRad(-ang), 0, this.azimuth + Math.PI / 2, "ZXY");
         } else if (intersectFaceIndex == 5) {
-            euler = new THREE.Euler(MathUtils.degToRad(getAngleDeg(this.heightRoof, this.depthValb)), 0, this.azimuth + Math.PI / 2, "ZXY");
+            let ang = getAngleDeg(this.heightRoof, this.baseSize.x / 2)
+            euler = new THREE.Euler(MathUtils.degToRad(-ang), 0, this.azimuth + 3 * Math.PI / 2, "ZXY");
         }
         panel.euler = euler;
+        console.log("house azimuth", MathUtils.radToDeg(this.azimuth));
+        console.log("azimuth:", MathUtils.radToDeg(euler.z));
+        console.log("incidence:", MathUtils.radToDeg(euler.x));
         panel.model.setRotationFromEuler(euler);
         return true;
     }
@@ -394,9 +414,13 @@ export class PultovaBlock extends RoofBlock {
             return false;
         }
         var euler;
-        euler = new THREE.Euler(MathUtils.degToRad(getAngleDeg(this.heightRoof, this.baseSize.y)), 0, this.azimuth + Math.PI / 2, "ZXY");
+        let ang = getAngleDeg(this.heightRoof, this.baseSize.x / 2)
+        euler = new THREE.Euler(MathUtils.degToRad(-ang), 0, this.azimuth + 3 * Math.PI / 2, "ZXY");
         panel.euler = euler;
         panel.model.setRotationFromEuler(euler);
+        console.log("house azimuth", MathUtils.radToDeg(this.azimuth));
+        console.log("azimuth:", MathUtils.radToDeg(euler.z));
+        console.log("incidence:", MathUtils.radToDeg(euler.x));
         return true;
     }
 
@@ -438,9 +462,13 @@ export class PlochaBlock extends RoofBlock {
             return false;
         }
         var euler;
-        euler = new THREE.Euler(MathUtils.degToRad(getAngleDeg(this.heightRoof, this.baseSize.y)), 0, this.azimuth + Math.PI / 2, "ZXY");
+        let ang = getAngleDeg(this.heightRoof, this.baseSize.x / 2)
+        euler = new THREE.Euler(MathUtils.degToRad(-ang), 0, this.azimuth + 3 * Math.PI / 2, "ZXY");
         panel.euler = euler;
         panel.model.setRotationFromEuler(euler);
+        console.log("house azimuth", MathUtils.radToDeg(this.azimuth));
+        console.log("azimuth:", MathUtils.radToDeg(euler.z));
+        console.log("incidence:", MathUtils.radToDeg(euler.x));
         return true;
     }
 

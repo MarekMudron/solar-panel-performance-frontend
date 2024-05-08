@@ -51,7 +51,7 @@ function getLastPosOnSide(startPoint, endPoint, x) {
     return lastPos;
 }
 
-function getPanelsOnSide(block, faceIndex, startPoint, endPoint) {
+function  getPanelsOnSide(block, faceIndex, startPoint, endPoint) {
     const panels = [];
     let diffVec = startPoint.clone().sub(endPoint);
     let numCols = Math.floor(Math.abs(diffVec.x / currentPanel.size.y)) + 1
@@ -119,7 +119,7 @@ function fromWorldToLocal(block, coords) {
 
 let panels = [];
 
-function drawPanels() {
+function recalculatePanels() {
     let [intersect, block] = getIntersectWithRoofs()
 
     if (intersect != null) {
@@ -143,39 +143,39 @@ function drawPanels() {
         }
     }else{
         //finishArea
-        finishArea();
+        placePanels();
     }
 }
 
-function startArea() {
+function startAnArea() {
     let [intersect, block] = getIntersectWithRoofs()
 
     if (intersect != null) {
         if (block.alignPanel(currentPanel, intersect.faceIndex)) {
             startPoint = fromWorldToLocal(block, intersect.point.clone())
-            addEventListener("pointermove", drawPanels);
+            addEventListener("pointermove", recalculatePanels);
         }
 
     }
 }
 
-function finishArea() {
+function placePanels() {
     if(panels.length != 0) {
         addPanelBlock(panels);
         panels = [];
     }
-    removeEventListener("pointermove", drawPanels);
+    removeEventListener("pointermove", recalculatePanels);
 }
 
 export let onPanelBlockAdded;
 
 export function activatePanelAdder() {
     deactivateDeleter();
-    addEventListener("pointerdown", startArea);
-    addEventListener("pointerup", finishArea)
+    addEventListener("pointerdown", startAnArea);
+    addEventListener("pointerup", placePanels)
 }
 
 export function deactivatePanelAdder() {
-    removeEventListener("pointerdown", startArea);
-    removeEventListener("pointerup", finishArea)
+    removeEventListener("pointerdown", startAnArea);
+    removeEventListener("pointerup", placePanels)
 }

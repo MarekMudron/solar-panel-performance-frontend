@@ -142,7 +142,7 @@ class RoofBlock {
                 return;
             }
             this.keyPointsGroup.scale.set(requiredSize.x, requiredSize.y, requiredSize.z)
-            if (this.constructor.name == "ValbovaBlock")
+            if (this.constructor.name == "HipBlock")
                 this.setDepthValb(this.depthValb)
         });
         this.emitEvent("resize", requiredSize)
@@ -191,7 +191,7 @@ function getAngleDeg(heightRoof, houseSizeY) {
     return MathUtils.radToDeg(Math.atan(heightRoof / houseSizeY));
 }
 
-export class SedlovaBlock extends RoofBlock {
+export class GableBlock extends RoofBlock {
     constructor(position, size, heightRoof, azimuth) {
         super(position, size, heightRoof, azimuth);
         this.roofGroup = this.initRoof();	// Group consisting of wireframe and filling
@@ -250,7 +250,7 @@ export class SedlovaBlock extends RoofBlock {
 }
 
 
-export class IhlanovaBlock extends RoofBlock {
+export class PyramidBlock extends RoofBlock {
     constructor(position, size, heightRoof, azimuth) {
         super(position, size, heightRoof, azimuth);
         this.roofGroup = this.initRoof();	// Group consisting of wireframe and filling
@@ -311,7 +311,7 @@ export class IhlanovaBlock extends RoofBlock {
 }
 
 
-export class ValbovaBlock extends RoofBlock {
+export class HipBlock extends RoofBlock {
     constructor(position, size, heightRoof, azimuth, depthValb) {
         super(position, size, heightRoof, azimuth);
         this.depthValb = depthValb
@@ -381,7 +381,7 @@ export class ValbovaBlock extends RoofBlock {
 
 }
 
-export class PultovaBlock extends RoofBlock {
+export class ShedBlock extends RoofBlock {
     constructor(position, size, heightRoof, azimuth) {
         super(position, size, heightRoof, azimuth);
         this.roofGroup = this.initRoof();	// Group consisting of wireframe and filling
@@ -429,7 +429,7 @@ export class PultovaBlock extends RoofBlock {
     }
 }
 
-export class PlochaBlock extends RoofBlock {
+export class FlatBlock extends RoofBlock {
     constructor(position, size, azimuth) {
         super(position, size, 0.0001, azimuth);
         this.roofGroup = this.initRoof();	// Group consisting of wireframe and filling

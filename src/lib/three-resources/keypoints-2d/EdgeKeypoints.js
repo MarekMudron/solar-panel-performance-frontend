@@ -2,8 +2,14 @@ import { Vector3, PlaneGeometry, MeshBasicMaterial, Mesh, DoubleSide, Group, Col
 import { getMapPlanePosition } from "../Raycaster";
 import { addOp } from "../UndoRedo";
 import { fadeAll, unfadeAll } from "../Site";
-
+import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+import { add, remove } from "$lib/three-resources/Scene.js"
 export var edgeKeypoints = [];
+
+let edgetext = document.createElement( 'div' );
+edgetext.className = 'edgetext';
+let edgelabel;
+
 
 class EdgeKeypoints {
     constructor(block) {
@@ -31,8 +37,8 @@ class EdgeKeypoints {
         plane1.position.setZ(0);
         plane1.position.setX(1 / 2)
         plane1.userData.hoverColor = new Color(0x104d70)
-        plane1.userData.color = new Color(0x000000)
-        plane1.material.color = new Color(0xff0000)
+        plane1.userData.color = new Color(0xaaaaaa)
+        plane1.material.color = new Color(0xaaaaaa)
         plane1.userData.lineIndex = 0
         plane1.updateMatrixWorld()
         g.add(plane1);
@@ -45,8 +51,8 @@ class EdgeKeypoints {
         plane2.material.depthTest = false;
         plane2.material.depthWrite = false;
         plane2.userData.hoverColor = new Color(0x104d70)
-        plane2.userData.color = new Color(0xffffff)
-        plane2.material.color = new Color(0xffffff)//0x00bbd4
+        plane2.userData.color = new Color(0xaaaaaa)
+        plane2.material.color = new Color(0xaaaaaa)//0x00bbd4
         plane2.position.setZ(0);
         plane2.position.setX(-1 / 2)
         plane2.userData.lineIndex = 1
@@ -60,8 +66,8 @@ class EdgeKeypoints {
         plane3.renderOrder = 900
         plane3.material.depthTest = false;
         plane3.userData.hoverColor = new Color(0x104d70)
-        plane3.userData.color = new Color(0x444444)
-        plane3.material.color = new Color(0x444444)
+        plane3.userData.color = new Color(0xaaaaaa)
+        plane3.material.color = new Color(0xaaaaaa)
         plane3.material.depthWrite = false;
         plane3.position.setZ(0);
         plane3.position.setY(-1 / 2)
@@ -143,6 +149,7 @@ class EdgeKeypoints {
 
     performCommand() {
         let currentPoint = getMapPlanePosition();
+        let cp = currentPoint.clone();
         let [offset, vec] = this.pointLineDistance(currentPoint, this.start, this.end);
         this.newSize = this.startHouseSize.clone()
         this.newPos = this.startHousePos.clone();
@@ -151,25 +158,34 @@ class EdgeKeypoints {
             this.block.setModelSize(this.newSize)
             this.newPos.add(vec.multiplyScalar(0.5));
             this.block.moveHorizontally(this.newPos)
+            edgetext.textContent = (this.newSize.x).toFixed(2);
         }
         else if (this.edgeIndex == 1) {
             this.newSize.x = this.newSize.x - offset;
             this.block.setModelSize(this.newSize)
             this.newPos.add(vec.multiplyScalar(0.5));
-            this.block.moveHorizontally(this.newPos)
+            this.block.moveHorizontally(this.newPos);
+            edgetext.textContent = (this.newSize.x).toFixed(2);
         }
         else if (this.edgeIndex == 2) {
             this.newSize.y = offset + this.newSize.y;
             this.block.setModelSize(this.newSize)
             this.newPos.add(vec.multiplyScalar(0.5));
             this.block.moveHorizontally(this.newPos)
+            edgetext.textContent = (this.newSize.y).toFixed(2);
         }
         else if (this.edgeIndex == 3) {
             this.newSize.y = this.newSize.y - offset;
             this.block.setModelSize(this.newSize)
             this.newPos.add(vec.multiplyScalar(0.5));
             this.block.moveHorizontally(this.newPos)
+            edgetext.textContent = (this.newSize.y).toFixed(2);
         }
+        
+        remove(edgelabel);
+        edgelabel = new CSS2DObject( edgetext );
+        edgelabel.position.copy(cp);
+        add( edgelabel );
     }
 
     finishCommand() {
@@ -178,8 +194,12 @@ class EdgeKeypoints {
             (state) => { state[0].setModelSize(state[3]); state[0].moveHorizontally(state[4]) },
             [this.block, this.newSize, this.newPos, this.startHouseSize, this.startHousePos,])
         this.edgeIndex = null;
+        edgetext.textContent = ""
+        remove(edgelabel);
     }
 }
+
+
 
 
 export function createKeypointFor(block) {

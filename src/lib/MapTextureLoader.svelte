@@ -43,15 +43,48 @@
 
     function get1pxToMeters(map) {
         var centerLatLng = map.getCenter(); // get map center
-        var pointC = map.latLngToContainerPoint(centerLatLng); // convert to containerpoint (pixels)
-        var pointX = [pointC.x + 1, pointC.y]; // add one pixel to x
 
-        // convert containerpoints to latlng's
-        var latLngC = map.containerPointToLatLng(pointC);
-        var latLngX = map.containerPointToLatLng(pointX);
 
-        var distance = latLngC.distanceTo(latLngX);
-        return distance;
+        const zoom = map.getZoom();
+        const center = map.getCenter();
+        const metersPerPixel = 40075016.686 * Math.abs(Math.cos(center.lat * Math.PI/180)) / Math.pow(2, zoom + 8);
+        return metersPerPixel;
+
+
+
+
+
+
+
+    //     const center = map.getSize().divideBy(2); // Get the center of the map
+    // const point1 = center.clone(); // Copy of center point
+    // const point2 = center.add([100, 0]); // Point 100 pixels to the right of the center
+
+    // // Convert screen points to geographic coordinates
+    // const latLng1 = map.containerPointToLatLng(point1);
+    // const latLng2 = map.containerPointToLatLng(point2);
+
+    // // Calculate the distance in meters between the two points
+    // const distance = map.distance(latLng1, latLng2);
+
+    // // Calculate meters per pixel
+    // console.log(distance/100);
+    // return distance / 100;
+
+
+
+
+
+
+        // var pointC = map.latLngToContainerPoint(centerLatLng); // convert to containerpoint (pixels)
+        // var pointX = [pointC.x + 1, pointC.y]; // add one pixel to x
+
+        // // convert containerpoints to latlng's
+        // var latLngC = map.containerPointToLatLng(pointC);
+        // var latLngX = map.containerPointToLatLng(pointX);
+
+        // var distance = latLngC.distanceTo(latLngX);
+        // return distance;
     }
 
     export let pxToMeter;
@@ -61,8 +94,8 @@
         leafletImage(map, function (err, canvas) {
             var img = document.createElement("img");
             pxToMeter = get1pxToMeters(map);
-            img.width = 3000; //{DIM};
-            img.height = 3000; //{DIM};
+            img.width = 2000; //{DIM};
+            img.height = 2000; //{DIM};
             img.src = canvas.toDataURL();
             texture = img;
             dispatch("onTextureLoaded", texture);
@@ -72,7 +105,7 @@
 </script>
 
 <div
-    style="visibility:hidden;height:{DIM}px; width:{DIM}px;"
+    style="visibility:visible;height:{DIM}px; width:{DIM}px;"
     id="map-element"
     use:initializeMap
 ></div>

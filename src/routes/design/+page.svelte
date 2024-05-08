@@ -1,10 +1,11 @@
 <script>
     import MapCanvas from "$lib/MapCanvas.svelte";
     import {
-        stageInProgress,
+        lastModifiedStage,
         currentStage,
         siteStorage,
         keypoints2dStorage,
+        deleteInProgress,
     } from "../../stores";
     import { currentLocation } from "../../stores";
     import { onDestroy, onMount } from "svelte";
@@ -19,9 +20,17 @@
         drawPlocha
     } from "$lib/three-resources/Interface.js";
     import { serialize2dKeypoints } from "$lib/three-resources/keypoints-2d/Keypoints2d.js";
-    import { activateRemover } from "$lib/three-resources/Remover.js";
+    import { activateRemover,deactivateRemover } from "$lib/three-resources/Remover.js";
+    import sedlovaIcon from '$lib/assets/sedlova.svg'
+    import plochaIcon from '$lib/assets/plocha.svg'
+    import pyramidovaIcon from '$lib/assets/pyramidova.svg'
+    import valbovaIcon from '$lib/assets/valbova.svg'
+    import pultovaIcon from '$lib/assets/pultova.svg'
+    import { drawingInProgress } from "../../stores"
+
+
     function setAsDirty() {
-        stageInProgress.set(1);
+        lastModifiedStage.set(1);
     }
 
     function saveSite() {
@@ -38,7 +47,7 @@
 
     onMount(() => {
         if ($currentStage < 1) {
-            stageInProgress.set(1);
+            lastModifiedStage.set(1);
         }
         loadSite();
         currentStage.set(1);
@@ -52,14 +61,19 @@
     let visible3d;
     let is2d = true;
 
+    let activeButtonIndex = -1;
+
     $: {
         visible2d = is2d ? "block" : "none";
         visible3d = is2d ? "none" : "block";
     }
 </script>
 
-<MapCanvas />
+<div id="modellingstuff">
+    <MapCanvas />
+</div>
 
+<div id="container"></div>
 <a
     type="button"
     class="btn btn-primary btn-block position-absolute bottom-0 end-0 mb-2"
@@ -74,14 +88,14 @@
 
     <button
         type="button"
-        class="btn btn-secondary btn-block mb-2"
-        on:click={() => callUndo()}>Undo</button
+        class="btn btn-secondary btn-block m-1"
+        on:click={() => callUndo()}><i class="fa fa-undo" aria-hidden="true"></i></button
     >
 
     <button
         type="button"
-        class="btn btn-secondary btn-block mb-2"
-        on:click={() => callRedo()}>Redo</button
+        class="btn btn-secondary btn-block m-1"
+        on:click={() => callRedo()}><i class="fa fa-redo" aria-hidden="true"></i></button
     >
 </div>
 
@@ -99,6 +113,7 @@
         on:click={() => {
             is2d = true;
             setTo2d();
+            deactivateRemover()
         }}
     />
     <label class="btn btn-outline-warning mode-button-label" for="radioto2d"
@@ -115,67 +130,82 @@
         on:click={() => {
             is2d = false;
             setTo3d();
+            deactivateRemover()
         }}
     />
     <label class="btn btn-outline-warning mode-button-label" for="radioto3d"
         >3D</label
     >
+
+    
 </div>
 
 <div class="vstack position-absolute top-50 start-0 translate-middle-y">
     <button
         type="button"
-        class="btn btn-primary btn-block mb-2"
-        style="display:{visible2d}"
+        class="btn {activeButtonIndex==0?'btn-primary':'btn-secondary'} btn-block mb-2"
+        style="display:{visible2d};"
+        disabled={$drawingInProgress}
         on:click={() => {
             setAsDirty();
             drawSedlova();
-        }}>Sedlova strecha</button
+            activeButtonIndex = 0;
+        }}><img src={sedlovaIcon} height="30" width="30"></button
     >
     <button
         type="button"
-        class="btn btn-primary btn-block mb-2"
-        style="display:{visible2d}"
+        class="btn {activeButtonIndex==1?'btn-primary':'btn-secondary'} btn-block mb-2"
+        style="display:{visible2d};"
+        disabled={$drawingInProgress}
         on:click={() => {
             setAsDirty();
             drawIhlanova();
-        }}>Ihlanova strecha</button
+            activeButtonIndex = 1;
+        }}><img src={pyramidovaIcon} height="30" width="30"></button
     >
     <button
         type="button"
-        class="btn btn-primary btn-block mb-2"
+        class="btn {activeButtonIndex==2?'btn-primary':'btn-secondary'} btn-block mb-2"
         style="display:{visible2d}"
+        disabled={$drawingInProgress}
         on:click={() => {
             setAsDirty();
             drawValbova();
-        }}>Valbova strecha</button
+            activeButtonIndex = 2;
+        }}><img src={valbovaIcon} height="30" width="30"></button
     >
     <button
         type="button"
-        class="btn btn-primary btn-block mb-2"
-        style="display:{visible2d}"
+        class="btn {activeButtonIndex==3?'btn-primary':'btn-secondary'} btn-block mb-2"
+        style="display:{visible2d};"
+        disabled={$drawingInProgress}
         on:click={() => {
             setAsDirty();
             drawPultova();
-        }}>Pultova strecha</button
+            activeButtonIndex = 3;
+        }}><img src={pultovaIcon} height="30" width="30"></button
     >
     <button
         type="button"
-        class="btn btn-primary btn-block mb-2"
+        class="btn {activeButtonIndex==4?'btn-primary':'btn-secondary'} btn-block mb-2"
         style="display:{visible2d}"
+        disabled={$drawingInProgress}
         on:click={() => {
             setAsDirty();
             drawPlocha();
-        }}>Plocha strecha</button
+            activeButtonIndex = 4;
+        }}><img src={plochaIcon} height="30" width="30"></button
     >
 
     <button
         type="button"
-        class="btn btn-danger btn-block mb-2"
-        style="display:{visible2d}"
+        class="btn btn-{$deleteInProgress?"outline-":""}danger btn-block mb-2"
+        style="display:{visible2d} height:30px"
+        disabled={$drawingInProgress}
         on:click={() => {
             activateRemover();
-        }}>Remove</button
+            activeButtonIndex = -1;
+        }}><i class="fa-solid fa-trash"></i></button
     >
 </div>
 
@@ -183,5 +213,11 @@
     .mode-button-label:not(active) {
         background-color: black;
         color: rgba(128, 128, 128, 0.5);
+    }
+
+    .label {
+        text-shadow: -1px 1px 1px rgb(0,0,0);
+        margin-left: 25px;
+        font-size: 20px;
     }
 </style>

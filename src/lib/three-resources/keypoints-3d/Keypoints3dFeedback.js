@@ -9,12 +9,14 @@ let hoveredRoof;
 function enableStit(intersect) {
     hoveredStit = intersect.object;
     intersect.object.material.color = intersect.object.userData.hoverColor;
+    document.body.style.cursor = 'grab';
 }
 
 function disableStit() {
     if (hoveredStit != null) {
         hoveredStit.material.color = hoveredStit.userData.color
         hoveredStit = null;
+        document.body.style.cursor = 'auto';
     }
 }
 
@@ -43,12 +45,14 @@ function feedbackTop() {
 function enableRoof(intersect) {
     hoveredRoof = intersect.object;
     intersect.object.material.color = intersect.object.userData.hoverColor;
+    document.body.style.cursor = 'grab';
 }
 
 function disableRoof() {
     if (hoveredRoof != null) {
         hoveredRoof.material.color = hoveredRoof.userData.color
         hoveredRoof = null;
+        document.body.style.cursor = 'auto';
     }
 }
 

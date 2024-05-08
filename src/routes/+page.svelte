@@ -4,7 +4,7 @@
     import Geolocation from "svelte-geolocation";
     import {
         currentLocation,
-        stageInProgress,
+        lastModifiedStage,
         didLocationChange,
     } from "../stores";
     import { onMount } from "svelte";
@@ -64,20 +64,14 @@
                     role="button"
                     href="/design"
                     on:click={() => {
-                        stageInProgress.set(0);
+                        lastModifiedStage.set(0);
                         didLocationChange.set(true);
                     }}
-                    class="btn btn-primary">Design</a
+                    class="btn btn-success">Design</a
                 >
             </div>
         </div>
     </div>
 </div>
 
-<button
-        class="btn btn-primary btn-block mb-2"
-        data-bs-toggle="modal"
-        data-bs-target="#newPanelDialog"
-        href="#">Add Template</button
-    >
-<NewPanelModal ></NewPanelModal>
+<!-- <NewPanelModal ></NewPanelModal> -->

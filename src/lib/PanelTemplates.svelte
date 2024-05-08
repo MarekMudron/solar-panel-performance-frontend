@@ -5,15 +5,15 @@
     import { onMount } from "svelte";
     import { hasAnyActiveString } from "$lib/three-resources/system/Strings.js";
 
-    function addPanelTemplate(e) {
+    function saveToStore(e) {
         panelTemplates.update((templates) => [...templates, e.detail]);
     }
 
     onMount(() => {
-        panelTemplates.update((templates) => [
-            ...templates,
-            { name: "template", height: 1, width: 0.5, pp: 10, pmpp: 10 },
-        ]);
+        // panelTemplates.update((templates) => [
+        //     ...templates,
+        //     { name: "template", height: 1, width: 0.5, pp: 10, pmpp: 10 },
+        // ]);
     });
 
     let currentTemplate;
@@ -161,7 +161,7 @@
     </div>
 </div>
 
-<NewPanelModal on:panelAdded={addPanelTemplate}></NewPanelModal>
+<NewPanelModal on:panelAdded={saveToStore}></NewPanelModal>
 
 <style>
     .mode-button-label:not(active) {

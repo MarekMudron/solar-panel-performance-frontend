@@ -1,25 +1,25 @@
 let undoStack = []
-let redoStack = []
+let doStack = []
 
-export function addOp(redo, undo, args) {
-	let obj = { undo, redo, args }
-	undoStack.push(obj);
+export function addOp(doAction, undoAction, args) {
+	let requestObj = { undoAction, doAction, args }
+	undoStack.push(requestObj);
 }
 
 export function callUndo() {
-	var o = undoStack.pop();
-	if (o) {
-		const { undo, redo, args } = o
-		redoStack.push({ undo, redo, args });
-		undo(args);
+	var operation = undoStack.pop();
+	if (operation) {
+		const { undoAction, doAction, args } = operation
+		doStack.push({ undoAction, doAction, args });
+		undoAction(args); // call Undo action
 	}
 }
 
 export function callRedo() {
-	var o = redoStack.pop();
-	if (o) {
-		var { undo, redo, args } = o
-		undoStack.push({ undo, redo, args });
-		redo(args);
+	var operation = doStack.pop();
+	if (operation) {
+		const { undoAction, doAction, args } = operation
+		undoStack.push({ undoAction, doAction, args });
+		doAction(args); // call Do action
 	}
 }

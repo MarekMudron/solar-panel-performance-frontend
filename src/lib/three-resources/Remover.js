@@ -7,6 +7,8 @@ import { removeEdgeKPFor } from "./keypoints-2d/EdgeKeypoints";
 import { removeCornersKPFor } from "./keypoints-2d/CornerKeypoints";
 import { removeRoofKPFor } from "./keypoints-3d/RoofKeypoint";
 import { removeStitKPFor } from "./keypoints-3d/StitKeypoint";
+import { deleteInProgress } from "../../stores"
+
 
 function removeKeypointsFor(block) {
     removePlaneKPFor(block);
@@ -29,8 +31,10 @@ function tryRemove() {
 export function activateRemover() {
     deactivateDrawer2d()
     canvas.addEventListener("pointerup", tryRemove)
+    deleteInProgress.set(true)
 }
 
 export function deactivateRemover() {
     canvas.removeEventListener("pointerup", tryRemove)
+    deleteInProgress.set(false)
 }

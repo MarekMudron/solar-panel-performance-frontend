@@ -1,6 +1,6 @@
 <script>
     import MapCanvas from "$lib/MapCanvas.svelte";
-    import { stageInProgress } from "../../stores";
+    import { lastModifiedStage } from "../../stores";
     import { currentStage } from "../../stores";
     import { onMount } from "svelte";
     import { deactivate2dKeypoints } from "$lib/three-resources/keypoints-2d/Keypoints2d.js";
@@ -11,12 +11,12 @@
     import PanelDeleter from "../../lib/PanelDeleter.svelte";
     import { stringsStorage } from "../../stores";
     // function setAsDirty() {
-    //     stageInProgress.set(2);
+    //     lastModifiedStage.set(2);
     // }
 
     onMount(() => {
         if ($currentStage < 2) {
-            stageInProgress.set(2);
+            lastModifiedStage.set(2);
         }
         setTo3d();
         deactivate2dKeypoints();

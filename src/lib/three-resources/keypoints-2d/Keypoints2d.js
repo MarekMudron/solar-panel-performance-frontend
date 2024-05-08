@@ -131,7 +131,7 @@ export function createKeypoints(block) {
     let planeKeypoint = Plane.createKeypointFor(block)
     let cornerKeypoint = Corner.createKeypointFor(block)
     let edgeKeypoint = Edge.createKeypointFor(block)
-    if(block.constructor.name == "ValbovaBlock") {
+    if(block.constructor.name == "HipBlock") {
         let valbKeypoint = Valb.createKeypointFor(block)
         g.add(valbKeypoint.model);
     }

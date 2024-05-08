@@ -85,6 +85,7 @@ let searchInput;
             return;
         }
         address = json.items[0]
+        
         dispatch("chosen")
     }
 
@@ -120,7 +121,7 @@ let searchInput;
             on:selection={chosen}
         />
         <button
-            class="btn btn-primary"
+            class="btn btn-success"
             type="submit"
             form="location-form"
             value="Submit">Find</button

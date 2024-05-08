@@ -22,6 +22,9 @@
     );
 
     let labels = [
+        "4",
+        "5",
+        "6",
         "7",
         "8",
         "9",
@@ -49,7 +52,7 @@
                     label: "Daily behavior",
                     fill: true,
                     backgroundColor: "#248c3e",
-                    data: data.slice(6,20),
+                    data: data.slice(3,20),
                 },
             ],
         };

@@ -9,7 +9,7 @@ export const didLocationChange = writable(false)
 
 export const texture = writable()
 
-export const stageInProgress = writable(0)
+export const lastModifiedStage = writable(0)
 
 export const currentStage = writable(0)
 
@@ -20,3 +20,6 @@ export const stringsStorage = writable([])
 export const keypoints2dStorage = writable();
 export const keypoints3dStorage = writable();
 export const panelTemplates = writable([]);
+export const drawingInProgress = writable(false);
+export const deleteInProgress = writable(false);
+

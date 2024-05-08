@@ -5,23 +5,26 @@ import * as Corner from "./CornerKeypoints.js"
 import * as Edge from "./EdgeKeypoints.js"
 import * as Plane from "./PlaneKeypoints.js"
 import * as Valb from "./ValbKeypoints.js"
-
+import png from "$lib/assets/rotate-solid.png"
 
 let hoveredcorner;
 let hoveredEdge;
 let hoveredPlane;
 let hoveredValb;
 
+
 function enableCorners(intersect) {
     hoveredcorner = intersect.object;
     intersect.object.material.color = intersect.object.userData.hoverColor;
-
+    document.body.style.cursor = `url('${png}'), auto`;
+    console.log("setting roate")
 }
 
 function disableCorners() {
     if(hoveredcorner != null) {
         hoveredcorner.material.color = hoveredcorner.userData.color
         hoveredcorner = null;    
+        document.body.style.cursor = 'auto';
     }
 }
 
@@ -46,6 +49,7 @@ function feedbackCorners() {
 function enableValbs(intersect) {
     hoveredValb = intersect.object;
     intersect.object.material.color = intersect.object.userData.hoverColor;
+    document.body.style.cursor = 'nesw-resize';
 
 }
 
@@ -53,6 +57,7 @@ function disableValbs() {
     if(hoveredValb != null) {
         hoveredValb.material.color = hoveredValb.userData.color
         hoveredValb = null;    
+        document.body.style.cursor = 'auto';
     }
 }
 
@@ -77,13 +82,14 @@ function feedbackValbs() {
 function enableEdges(intersect) {
     hoveredEdge = intersect.object;
     intersect.object.material.color = intersect.object.userData.hoverColor;
-
+    document.body.style.cursor = 'nesw-resize';
 }
 
 function disableEdges() {
     if(hoveredEdge != null) {
         hoveredEdge.material.color = hoveredEdge.userData.color
         hoveredEdge = null;    
+        document.body.style.cursor = 'auto';
     }
 }
 
@@ -111,13 +117,14 @@ function feedbackEdges() {
 function enablePlane(intersect) {
     hoveredPlane = intersect.object;
     hoveredPlane.material.visible = true;
-
+    document.body.style.cursor = 'grab';
 }
 
 function disablePlane() {
     if(hoveredPlane != null) {
         hoveredPlane.material.visible = false;
         hoveredPlane = null;    
+        document.body.style.cursor = 'auto';
     }
 }
 

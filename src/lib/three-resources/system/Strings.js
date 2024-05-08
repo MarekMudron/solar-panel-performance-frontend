@@ -6,13 +6,13 @@ let strings = [];
 
 class String {
     constructor() {
-        this.panels = [];
+        this.panelBlocks = [];
         this.isActive = false;
     }
 
-    addPanels(panels) {
-        this.panels.push(panels)
-        this.panels.forEach(panelBlock => {
+    addPanelBlock(panelBlock) {
+        this.panelBlocks.push(panelBlock)
+        this.panelBlocks.forEach(panelBlock => {
             if (panelBlock)
                 panelBlock.forEach(panel => {
                     panel.setHighlighted(this.isActive);
@@ -22,7 +22,7 @@ class String {
 
     setActive(toActive) {
         this.isActive = toActive;
-        this.panels.forEach(panelBlock => {
+        this.panelBlocks.forEach(panelBlock => {
             if (panelBlock)
                 panelBlock.forEach(panel => {
                     panel.setHighlighted(toActive);
@@ -52,7 +52,7 @@ export function setActiveString(string) {
 }
 
 export function addPanelBlock(panels) {
-    activeString.addPanels(panels);
+    activeString.addPanelBlock(panels);
     stringsStorage.set(strings)
 }
 

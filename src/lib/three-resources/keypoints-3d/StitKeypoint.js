@@ -1,4 +1,4 @@
-import { SedlovaBlock, ValbovaBlock, PultovaBlock, IhlanovaBlock } from "../Blocks"
+import { GableBlock, HipBlock, ShedBlock, PyramidBlock } from "../Blocks"
 import { BoxGeometry, Color, Mesh, MeshBasicMaterial, Sprite, SpriteMaterial, Vector3 } from "three";
 import { add, remove } from "../Scene";
 import { getPerpendilarPlane, getSphere } from "../polygonFactory";
@@ -14,37 +14,37 @@ class StitKeypoint {
         this.block = block;
         this.model = this.initModel();
         this.block.addEventListener("resize", (requiredSize) => {
-            if (this.block instanceof SedlovaBlock) {
+            if (this.block instanceof GableBlock) {
                 this.model.scale.set(1, 0.3 / requiredSize.y, 0.3 / this.block.heightRoof);
             }
-            else if (this.block instanceof IhlanovaBlock) {
+            else if (this.block instanceof PyramidBlock) {
                 this.model.scale.set(0.5 / requiredSize.x, 0.5 / requiredSize.y, 0.5 / this.block.heightRoof);
-            } else if (this.block instanceof ValbovaBlock) {
+            } else if (this.block instanceof HipBlock) {
                 this.model.scale.set(1 - (2 * this.block.depthValb / requiredSize.x), 0.3 / requiredSize.y, 0.3 / this.block.heightRoof);
-            } else if (this.block instanceof PultovaBlock) {
+            } else if (this.block instanceof ShedBlock) {
                 this.model.scale.set(0.3 / requiredSize.x, 1, 0.3 / this.block.heightRoof);
             }
         })
         this.block.addEventListener("roofResize", (newHeight) => {
-            if (this.block instanceof SedlovaBlock) {
+            if (this.block instanceof GableBlock) {
                 this.model.scale.setZ(0.3 / newHeight);
-            } else if (this.block instanceof IhlanovaBlock) {
+            } else if (this.block instanceof PyramidBlock) {
                 this.model.scale.setZ(0.5 / newHeight);
-            } else if (this.block instanceof ValbovaBlock) {
+            } else if (this.block instanceof HipBlock) {
                 this.model.scale.setZ(0.3 / newHeight);
-            } else if (this.block instanceof PultovaBlock) {
+            } else if (this.block instanceof ShedBlock) {
                 this.model.scale.setZ(0.3 / newHeight);
             }
         });
         this.block.addEventListener("valbChange", (requiredDepth) => {
-            if (this.block instanceof ValbovaBlock) {
+            if (this.block instanceof HipBlock) {
                 this.model.scale.setX(1 - (2 * requiredDepth / this.block.baseSize.x));
             }
         });
     }
 
     initModel() {
-        if (this.block instanceof SedlovaBlock) {
+        if (this.block instanceof GableBlock) {
             const geometry = new BoxGeometry(1, 1, 1);
             const material = new MeshBasicMaterial();
             const cube = new Mesh(geometry, material);
@@ -59,7 +59,7 @@ class StitKeypoint {
             cube.name = "stitKeypoint"
             cube.scale.set(1, 1, 1)
             return cube;
-        } else if (this.block instanceof IhlanovaBlock) {
+        } else if (this.block instanceof PyramidBlock) {
             let sprite = getSphere(new Vector3())
             sprite.name = "stitKeypoint"
             sprite.userData.hoverColor = new Color(0x104d70)
@@ -69,7 +69,7 @@ class StitKeypoint {
             sprite.scale.set(1, 1, 1)
             sprite.visible = false;
             return sprite
-        } else if (this.block instanceof ValbovaBlock) {
+        } else if (this.block instanceof HipBlock) {
             const geometry = new BoxGeometry(1, 1, 1);
             const material = new MeshBasicMaterial();
             const cube = new Mesh(geometry, material);
@@ -82,7 +82,7 @@ class StitKeypoint {
             cube.scale.set(1, 1, 1)
             return cube;
         }
-        else if (this.block instanceof PultovaBlock) {
+        else if (this.block instanceof ShedBlock) {
             const geometry = new BoxGeometry(1, 1, 1);
             const material = new MeshBasicMaterial();
             const cube = new Mesh(geometry, material);
@@ -128,7 +128,7 @@ class StitKeypoint {
 }
 
 export function createKeypointFor(block) {
-    if(block.constructor.name == "PlochaBlock") {
+    if(block.constructor.name == "FlatBlock") {
         return null;
     }
     let cp = new StitKeypoint(block);

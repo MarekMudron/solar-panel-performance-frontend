@@ -1,10 +1,13 @@
 import { PerspectiveCamera, WebGLRenderer, Vector3} from "three";
+import { CSS2DRenderer,CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 import * as Scene from "$lib/three-resources/Scene.js"
 import * as Controls from "$lib/three-resources/Controls.js"
 
 export let camera;
 export let canvas;
 let renderer
+let labelRenderer;
+
 
 let prevCamPos = new Vector3(0,0,100);
 
@@ -28,6 +31,15 @@ export function setup(canvas_) {
     renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
 
 
+    labelRenderer = new CSS2DRenderer();
+    labelRenderer.setSize( canvas.clientWidth, canvas.clientHeight );
+    labelRenderer.domElement.style.position = 'absolute';
+    labelRenderer.domElement.style.top = '50px';
+    labelRenderer.domElement.style.pointerEvents = 'none';
+    document.getElementById("modellingstuff").appendChild( labelRenderer.domElement );
+    //document.body.appendChild(labelRenderer.domElement);
+
+
     camera = new PerspectiveCamera(
         45,
         canvas.clientWidth / canvas.clientHeight,
@@ -41,6 +53,8 @@ export function setup(canvas_) {
     Scene.setup()
     Controls.setup(camera, canvas);
 
+
+
     window.addEventListener("resize", onWindowResize)
     update();
 }
@@ -51,12 +65,13 @@ function onWindowResize() {
     camera.aspect = canvas.clientWidth / canvas.clientHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    labelRenderer.setSize( canvas.clientWidth, canvas.clientHeight );
 }
 
 
 function update() {
     requestAnimationFrame(update);
     Controls.update();
-    Scene.update(renderer, camera);
+    Scene.update(renderer, labelRenderer, camera);
 }
 

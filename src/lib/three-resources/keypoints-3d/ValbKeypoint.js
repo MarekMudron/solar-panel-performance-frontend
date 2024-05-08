@@ -3,7 +3,7 @@ import { getPerpendilarPlane, getSphere } from "../polygonFactory";
 import { remove, add } from "../Scene";
 import { addOp } from "../UndoRedo";
 import { getIntersectWithMesh } from "../Raycaster";
-import { ValbovaBlock } from "../Blocks";
+import { HipBlock } from "../Blocks";
 export var valbKeypoints = [];
 import { camera } from "../Canvas";
 
@@ -22,13 +22,13 @@ export class ValbKeypoint {
             this.model.children[1].position.setX(1 / 2 - (this.block.depthValb / requiredSize.x))
         })
         this.block.addEventListener("roofResize", (newHeight) => {
-            if (this.block instanceof ValbovaBlock) {
+            if (this.block instanceof HipBlock) {
                 this.model.children[0].scale.setZ(0.5 / newHeight);
                 this.model.children[1].scale.setZ(0.5 / newHeight);
             }
         });
         this.block.addEventListener("valbChange", (newDepth) => {
-            if (this.block instanceof ValbovaBlock) {
+            if (this.block instanceof HipBlock) {
                 this.model.children[0].position.setX(-1 / 2 + newDepth/this.block.baseSize.x);
                 this.model.children[1].position.setX(1 / 2 - newDepth/this.block.baseSize.x);
             }

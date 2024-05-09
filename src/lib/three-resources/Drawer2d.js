@@ -77,10 +77,12 @@ let l1;
 let l2;
 let linetext = document.createElement( 'div' );
 linetext.className = 'linetext';
+linetext.style.backgroundColor = "white"
 let linelabel;
 
 let recttext = document.createElement( 'div' );
 recttext.className = 'recttext';
+recttext.style.backgroundColor = "white"
 let rectlabel;
 
 function updateEndPointAndLen(line, endPos) {

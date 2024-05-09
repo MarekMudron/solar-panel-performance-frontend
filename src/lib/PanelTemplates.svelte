@@ -33,6 +33,12 @@
         }
     }
 
+    function deleteTemplate(template) {
+        panelTemplates.update((templates) => {
+            return templates.filter((item) => item !== template);
+        });
+    }
+
     var isVertical = false;
     var isStickyAlignment = true;
     var alignmentAngle = 45;
@@ -88,7 +94,7 @@
                         checked={isStickyAlignment}
                         on:click={() => {
                             isStickyAlignment = true;
-                            activateTemplate(currentTemplate)
+                            activateTemplate(currentTemplate);
                         }}
                     />
                     <label class="form-check-label" for="exampleRadios1">
@@ -98,7 +104,7 @@
                 <div class="form-check">
                     <div>
                         <label class="form-check-label" for="exampleRadios2">
-                            Fixed Angle [°C] <input
+                            Fixed Angle [degrees] <input
                                 type="number"
                                 class="form-control"
                                 id="ppinput"
@@ -118,46 +124,50 @@
                             checked={!isStickyAlignment}
                             on:click={() => {
                                 isStickyAlignment = false;
-                                activateTemplate(currentTemplate)
+                                activateTemplate(currentTemplate);
                             }}
                         />
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col rounded bg-secondary">
+        <hr />
+        <div class="col rounded">
             {#each $panelTemplates as template}
-                <div class="row m-1 bro rounded">
-                    <div class="col-8">
-                        <input
-                            type="radio"
-                            class="btn-check"
-                            name="panelTemplates"
-                            id={template.name}
-                            autocomplete="off"
-                            on:click={() => activateTemplate(template)}
-                        />
-                        <label
-                            class="btn btn-light m-1 btn-block"
-                            for={template.name}>{template.name}</label
-                        >
-                    </div>
-                    <div class="col-2">
-                        <button
-                            class="btn btn-danger"
-                            on:click={() => deleteTemplate(template)}
-                            ><i class="fa-solid fa-trash"></i></button
-                        >
+                <div class="row rounded bg-secondary m-1">
+                    <div class="d-flex justify-content-between">
+                        <div class=" ">
+                            <input
+                                type="radio"
+                                class="btn-check w-100"
+                                name="panelTemplates"
+                                style="min-width:120px !important;"
+                                id={template.name}
+                                autocomplete="off"
+                                on:click={() => activateTemplate(template)}
+                            />
+                            <label
+                                class="btn btn-light m-1 btn-block"
+                                for={template.name}>{template.name}</label
+                            >
+                        </div>
+                        <div class="">
+                            <button
+                                class="btn btn-danger my-1"
+                                on:click={() => deleteTemplate(template)}
+                                ><i class="fa-solid fa-trash"></i></button
+                            >
+                        </div>
                     </div>
                 </div>
             {/each}
-            <button
-                class="btn btn-primary w-100 btn-block mb-2"
-                data-bs-toggle="modal"
-                data-bs-target="#newPanelDialog"
-                href="#">Add Template</button
-            >
         </div>
+        <button
+            class="btn btn-primary w-100 btn-block mb-2"
+            data-bs-toggle="modal"
+            data-bs-target="#newPanelDialog"
+            href="#">Add Template</button
+        >
     </div>
 </div>
 

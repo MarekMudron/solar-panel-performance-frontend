@@ -42,6 +42,7 @@
     ];
 
     export let data;
+    export let label;
     let dataset = [];
 
     $: {
@@ -49,7 +50,7 @@
             labels: labels,
             datasets: [
                 {
-                    label: "Daily behavior",
+                    label: label,
                     fill: true,
                     backgroundColor: "#248c3e",
                     data: data.slice(3,20),
@@ -65,7 +66,7 @@
         data={dataset}
         width={300}
         height={200}
-        options={{ maintainAspectRatio: true }}
+        options={{ maintainAspectRatio: true, plugins: {legend: {onHover: console.log("legend"), onLeave: console.log("leave")}} }}
     />
 </div>
 {/if}

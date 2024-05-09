@@ -42,7 +42,7 @@ export function getPanelOutlineGeometry(size) {
 }
 
 function getSphere(center, color) {
-	const geometry = new THREE.SphereGeometry(1, 32, 16);
+	const geometry = new THREE.SphereGeometry(0.5, 32, 16);
 	const material = new THREE.MeshBasicMaterial({transparent:true });
 	const sphere = new THREE.Mesh(geometry, material);
 	// const material = new THREE.SpriteMaterial( {color: color});

@@ -25,7 +25,9 @@
     });
 </script>
 
-<MapCanvas />
+<div id="modellingstuff">
+    <MapCanvas />
+</div>
 
 <PanelDeleter></PanelDeleter>
 

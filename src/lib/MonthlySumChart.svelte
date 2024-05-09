@@ -38,11 +38,15 @@
     let dataset;
 
     $: {
+        data = data.map(function (v) {
+            return v/1000
+        });
+
         dataset = {
             labels: labels,
             datasets: [
                 {
-                    label: "Monthly production",
+                    label: "Monthly production [kW]",
                     fill: true,
                     backgroundColor: "#248c3e",
                     data: data,
@@ -51,7 +55,6 @@
         };
     }
 </script>
-
 
 <div class="border">
     <Bar

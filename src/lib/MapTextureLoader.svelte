@@ -105,7 +105,7 @@
 </script>
 
 <div
-    style="visibility:visible;height:{DIM}px; width:{DIM}px;"
+    style="visibility:hidden;height:{DIM}px; width:{DIM}px;"
     id="map-element"
     use:initializeMap
 ></div>

@@ -8,6 +8,7 @@ export var edgeKeypoints = [];
 
 let edgetext = document.createElement( 'div' );
 edgetext.className = 'edgetext';
+edgetext.style.backgroundColor = "white"
 let edgelabel;
 
 

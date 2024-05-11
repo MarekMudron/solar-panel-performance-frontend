@@ -75,3 +75,9 @@
 </div>
 
 <!-- <NewPanelModal ></NewPanelModal> -->
+<!-- 
+{#if true }
+<div class=" bg-primary position-absolute w-100 h-100 z-3">
+    <h1>Loading</h1>
+</div>
+{/if} -->

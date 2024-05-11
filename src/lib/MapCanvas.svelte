@@ -50,6 +50,12 @@
     ></MapTextureLoader>
 {/if}
 
+<!-- 
+{#if !isTextureLoaded }
+<div class=" bg-primary position-absolute w-100 h-100 z-3 start-0" style="top:60px;height:calc(100vh - 60px)">
+    <h1>Loading</h1>
+</div>{/if} -->
+
 <canvas
     id="canvas"
     style="height:calc(100vh - 60px);visibility:visible; width:100%; z-index:0; display:block; background-color:#000000"

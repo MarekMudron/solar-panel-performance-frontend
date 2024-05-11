@@ -125,4 +125,13 @@
       {/each}
     </div>
   </div>
+  {:else}
+
+  <div class="container">
+    <div class="row">
+      <h1>Running the Simulation...</h1>
+
+      </div>
+      </div>
+
 {/if}

@@ -3,8 +3,10 @@ import { stringsStorage } from "../../../stores";
 
 function deleteUnderCursor() {
     stringsStorage.subscribe(strings => {
+        console.log(strings);
         strings.forEach(string => {
-            string.panels.forEach(panelBlock => {
+            console.log(string.panelBlocks);
+            string.panelBlocks.forEach(panelBlock => {
                 if (panelBlock)
                     panelBlock.forEach(panel => {
                         let i = getIntersectWithMesh(panel.model);
@@ -12,6 +14,7 @@ function deleteUnderCursor() {
                             panel.destroy()
                             const index = panelBlock.indexOf(panel);
                             panelBlock.splice(index, 1);
+                            // eslint-disable-next-line no-self-assign
                             panelBlock = panelBlock;
                         }
                     });

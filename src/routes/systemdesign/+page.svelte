@@ -22,6 +22,7 @@
         deactivate2dKeypoints();
         deactivate3dKeypoints();
         currentStage.set(2);
+        stringsStorage.set([])
     });
 </script>
 

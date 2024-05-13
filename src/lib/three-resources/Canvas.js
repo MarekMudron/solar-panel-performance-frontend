@@ -46,7 +46,7 @@ export function setup(canvas_) {
         1,
         1000);
     camera.position.set(0,0,100)
-    camera.lookAt(0, 0, 10);
+    camera.lookAt(0, 0, 20);
     camera.up.set(0, 0, 1);
     camera.layers.enableAll();
 
